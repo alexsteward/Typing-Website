@@ -43,6 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     incorrectCount = 0;
     speedCounter.textContent = "0";
     accuracyCounter.textContent = "100";
+    inputArea.disabled = false;
   };
 
   const calculateWPM = (elapsedTime) => {
@@ -87,15 +88,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
-  refreshButton.addEventListener("click", () => {
-    updatePrompt();
-    inputArea.disabled = false;
-  });
+  refreshButton.addEventListener("click", () => updatePrompt());
 
-  nextButton.addEventListener("click", () => {
-    updatePrompt();
-    inputArea.disabled = false;
-  });
+  nextButton.addEventListener("click", () => updatePrompt());
 
   navItems.forEach((item) => {
     item.addEventListener("click", () => {
