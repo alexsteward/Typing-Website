@@ -1,121 +1,89 @@
-/* General Reset */
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: 'Arial', sans-serif;
+body {
+  font-family: Arial, sans-serif;
   background-color: #0f111a;
   color: #c5c6c7;
+  margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  overflow: hidden;
 }
 
 #app {
   width: 80%;
-  max-width: 900px;
+  max-width: 600px;
   text-align: center;
 }
 
-/* Header Logo */
-header h1#logo {
-  font-size: 24px;
-  font-weight: bold;
+header h1 {
   color: #ffcc00;
   margin-bottom: 20px;
 }
 
-/* Typing Area */
-main #typing-area {
-  background-color: #16191f;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  position: relative;
-  text-align: center;
-}
-
 #prompt-container {
-  position: relative;
-  display: inline-block;
-  text-align: left;
-  width: 100%;
+  background: #16191f;
   padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  margin-bottom: 20px;
 }
 
 #prompt {
-  font-size: 22px;
-  margin-bottom: 20px;
-  line-height: 1.5;
-  position: relative;
-  white-space: pre-wrap; /* Maintain spaces and newlines */
-}
-
-#prompt span {
-  opacity: 0.4;
+  font-size: 18px;
+  white-space: pre-wrap;
   color: #c5c6c7;
-  transition: opacity 0.2s;
-  user-select: none;
+  opacity: 0.4;
+  margin-bottom: 10px;
 }
 
 #prompt span.correct {
+  color: white;
   opacity: 1;
-  color: #ffffff;
 }
 
 #prompt span.incorrect {
+  color: red;
   opacity: 1;
-  color: #ff0000;
 }
 
 #input-area {
+  margin-top: 10px;
+  outline: none;
+  border: none;
+  background: none;
+  color: transparent;
+  font-size: 18px;
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: transparent;
-  color: transparent;
-  font-size: 22px;
-  line-height: 1.5;
-  border: none;
-  outline: none;
-  white-space: pre-wrap;
   z-index: 2;
-  cursor: text;
+  white-space: pre-wrap;
 }
 
-#input-area:focus {
-  outline: none;
-}
-
-#error-message {
-  color: #ff0000;
-  font-size: 12px;
-  margin-top: 5px;
-}
-
-footer {
-  margin-top: 20px;
+#stats {
   display: flex;
   justify-content: space-between;
-  color: #72767d;
-  font-size: 14px;
+  align-items: center;
+  margin-top: 10px;
 }
 
 button {
-  background-color: #ffcc00;
-  color: #16191f;
-  border: none;
-  padding: 10px;
+  padding: 5px 10px;
   font-size: 16px;
+  background: #ffcc00;
+  border: none;
   cursor: pointer;
 }
 
 button:disabled {
-  opacity: 0.5;
+  background: #555;
   cursor: not-allowed;
+}
+
+#pace, #accuracy {
+  font-size: 14px;
 }
 
 
