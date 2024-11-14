@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
   let totalTyped = 0;
   let isTyping = false;
 
-  // Helper: Reset prompt and stats
   const resetStats = () => {
     startTime = null;
     correctChars = 0;
@@ -27,13 +26,13 @@ document.addEventListener("DOMContentLoaded", () => {
     wpmDisplay.textContent = "0";
     accuracyDisplay.textContent = "100%";
     completionMessage.hidden = true;
-    inputArea.setAttribute("contenteditable", "true");
+    inputArea.textContent = "";
+    inputArea.setAttribute("contenteditable", "false");
     isTyping = false;
-    refreshButton.disabled = false;
-    nextButton.disabled = false;
+    refreshButton.disabled = true;
+    nextButton.disabled = true;
   };
 
-  // Load a new prompt
   const loadPrompt = (index) => {
     resetStats();
     currentPrompt = prompts[index];
@@ -41,37 +40,30 @@ document.addEventListener("DOMContentLoaded", () => {
       .split("")
       .map((char) => `<span>${char}</span>`)
       .join("");
-    inputArea.textContent = "";
-    refreshButton.disabled = true;
-    nextButton.disabled = true;
   };
 
-  // Calculate and update WPM and Accuracy
   const updateStats = () => {
     if (!startTime) return;
-    const elapsedTime = (new Date() - startTime) / 1000 / 60; // in minutes
+    const elapsedTime = (new Date() - startTime) / 1000 / 60; // minutes
     const wpm = Math.round(correctChars / 5 / elapsedTime);
     const accuracy = Math.round((correctChars / totalTyped) * 100) || 100;
-    wpmDisplay.textContent = isNaN(wpm) || wpm < 0 ? "0" : wpm;
+    wpmDisplay.textContent = Math.max(wpm, 0);
     accuracyDisplay.textContent = `${accuracy}%`;
   };
 
-  // Event listener for typing
-  inputArea.addEventListener("input", (e) => {
+  inputArea.addEventListener("input", () => {
     if (!isTyping) return;
-    const inputText = e.target.textContent;
+
+    const userInput = inputArea.textContent;
     const spans = promptElement.querySelectorAll("span");
 
-    // Start timer on first keystroke
     if (!startTime) startTime = new Date();
 
-    // Reset for real-time calculations
     correctChars = 0;
-    totalTyped = inputText.length;
+    totalTyped = userInput.length;
 
-    // Validate each character
     spans.forEach((span, i) => {
-      const typedChar = inputText[i];
+      const typedChar = userInput[i];
       if (typedChar == null) {
         span.classList.remove("correct", "incorrect");
       } else if (typedChar === span.textContent) {
@@ -84,20 +76,17 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Update stats
     updateStats();
 
-    // Check if the prompt is complete
-    if (inputText === currentPrompt) {
+    if (userInput === currentPrompt) {
       inputArea.setAttribute("contenteditable", "false");
       completionMessage.hidden = false;
-      isTyping = false;
       refreshButton.disabled = false;
       nextButton.disabled = false;
+      isTyping = false;
     }
   });
 
-  // Event listeners for refresh and next buttons
   refreshButton.addEventListener("click", () => {
     loadPrompt(prompts.indexOf(currentPrompt));
   });
@@ -107,20 +96,19 @@ document.addEventListener("DOMContentLoaded", () => {
     loadPrompt(nextIndex);
   });
 
-  // Initialize the first prompt
-  loadPrompt(0);
-
-  // Allow focus by clicking on prompt
   promptElement.addEventListener("click", () => {
     if (!isTyping) {
       inputArea.setAttribute("contenteditable", "true");
       inputArea.focus();
       isTyping = true;
-      refreshButton.disabled = false;
+      refreshButton.disabled = true;
       nextButton.disabled = true;
     }
   });
+
+  loadPrompt(0);
 });
+
 
 
 
