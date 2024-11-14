@@ -3,13 +3,14 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputArea = document.getElementById("input-area");
   const speedCounter = document.getElementById("speed-counter");
   const accuracyCounter = document.getElementById("accuracy-counter");
+  const refreshButton = document.getElementById("refresh-button");
+  const nextButton = document.getElementById("next-button");
   const navItems = document.querySelectorAll(".menu-item");
 
   let currentPrompt = "";
   let startTime = null;
   let incorrectCount = 0;
 
-  // Prompts for different modes
   const modes = {
     punctuation: [
       "Hello, world! Can you type this accurately?",
@@ -48,9 +49,8 @@ document.addEventListener("DOMContentLoaded", () => {
   // Calculate WPM
   const calculateWPM = (elapsedTime) => {
     const totalChars = currentPrompt.length;
-    const penalty = incorrectCount * 0.5; // Deduction per incorrect character
-    const wpm = Math.floor(((totalChars / 5) / elapsedTime) - penalty);
-    return Math.max(0, wpm); // Ensure WPM is not negative
+    const wpm = Math.floor((totalChars / 5) / elapsedTime);
+    return Math.max(0, wpm);
   };
 
   // Calculate accuracy
@@ -92,6 +92,18 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  // Refresh button
+  refreshButton.addEventListener("click", () => {
+    updatePrompt();
+    inputArea.disabled = false;
+  });
+
+  // Next button
+  nextButton.addEventListener("click", () => {
+    updatePrompt();
+    inputArea.disabled = false;
+  });
+
   // Mode navigation
   navItems.forEach((item) => {
     item.addEventListener("click", () => {
@@ -104,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updatePrompt();
 });
+
 
 
 
