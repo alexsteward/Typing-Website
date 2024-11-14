@@ -21,6 +21,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let correctCount = 0;
   let incorrectCount = 0;
   let userInput = "";
+  let typedChars = [];
 
   // Function to calculate WPM
   const calculateWPM = (elapsedTime) => {
@@ -41,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
     correctCount = 0;
     incorrectCount = 0;
     userInput = ""; // Reset user input
+    typedChars = []; // Reset typed characters array
     inputArea.disabled = false; // Enable the input area
     inputArea.value = ""; // Clear input area
     prompt.innerHTML = currentPrompt.split("").map(char => `<span>${char}</span>`).join(""); // Set the prompt text with spans for each character
@@ -72,10 +74,16 @@ document.addEventListener("DOMContentLoaded", () => {
       const promptChar = currentPrompt[i];
       const span = promptSpans[i];
 
+      if (typedChars[i]) {
+        // Skip this character if already typed correctly
+        continue;
+      }
+
       if (inputChar === promptChar) {
         span.classList.add("correct");
         span.classList.remove("incorrect");
         correctCount++;
+        typedChars[i] = true; // Mark this character as correctly typed
       } else {
         span.classList.add("incorrect");
         span.classList.remove("correct");
@@ -129,6 +137,11 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextIndex = (currentIndex + 1) % prompts.length; // Loop back to the start if at the end
     currentPrompt = prompts[nextIndex];
     updatePrompt();
+  });
+
+  // Allow user to click to focus the typing input
+  prompt.addEventListener("click", () => {
+    inputArea.focus();
   });
 
   // Initialize the first prompt
