@@ -9,27 +9,23 @@
 <body>
   <div id="app">
     <header>
-      <h1 id="logo">Typing Test</h1>
+      <h1>Typing Test</h1>
     </header>
-
-    <main id="typing-area">
+    <main>
       <div id="prompt-container">
-        <div id="prompt"></div>
-        <input type="text" id="input-area" autocomplete="off" />
+        <div id="prompt" class="prompt"></div>
+        <div id="input-area" contenteditable="true"></div>
       </div>
-      <button id="refresh-button">↻ Refresh</button>
-      <button id="next-button" disabled>→ Next</button>
+      <div id="stats">
+        <button id="refresh">↺</button>
+        <button id="next" disabled>→</button>
+        <div id="pace">WPM: <span id="wpm">0</span></div>
+        <div id="accuracy">Accuracy: <span id="accuracy-score">100%</span></div>
+      </div>
     </main>
-
-    <footer>
-      <div>
-        <span>Speed: <span id="speed-counter">0</span> WPM</span>
-        <span>Accuracy: <span id="accuracy-counter">100%</span></span>
-      </div>
-    </footer>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
+
 
