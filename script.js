@@ -1,108 +1,94 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const promptElement = document.getElementById("prompt");
+  const promptEl = document.getElementById("prompt");
   const inputArea = document.getElementById("input-area");
-  const wpmDisplay = document.getElementById("wpm");
-  const accuracyDisplay = document.getElementById("accuracy-score");
+  const completionMessage = document.getElementById("completion-message");
   const refreshButton = document.getElementById("refresh");
   const nextButton = document.getElementById("next");
-  const completionMessage = document.getElementById("completion-message");
-  const startButton = document.getElementById("start-button");
+  const wpmEl = document.getElementById("wpm");
+  const accuracyEl = document.getElementById("accuracy-value");
 
-  let prompts = [
-    "The quick brown fox jumps over the lazy dog.",
-    "Typing fast requires practice and focus.",
-    "Never give up on your goals, no matter what.",
-    "Consistency is the key to mastering skills.",
-  ];
   let currentPrompt = "";
   let startTime = null;
-  let correctChars = 0;
-  let totalTyped = 0;
-  let isTyping = false;
+  let totalErrors = 0;
 
-  const resetStats = () => {
-    startTime = null;
-    correctChars = 0;
-    totalTyped = 0;
-    wpmDisplay.textContent = "0";
-    accuracyDisplay.textContent = "100%";
-    completionMessage.hidden = true;
-    inputArea.textContent = "";
-    inputArea.setAttribute("contenteditable", "false");
-    isTyping = false;
-    startButton.disabled = false;
-  };
+  const prompts = [
+    "The quick brown fox jumps over the lazy dog.",
+    "Typing is fun and improves your speed.",
+    "Accuracy and consistency are key.",
+    "Test your skills with this challenge."
+  ];
 
-  const loadPrompt = (index) => {
-    resetStats();
-    currentPrompt = prompts[index];
-    promptElement.innerHTML = currentPrompt
+  const loadPrompt = () => {
+    currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+    promptEl.innerHTML = currentPrompt
       .split("")
       .map((char) => `<span>${char}</span>`)
       .join("");
+    inputArea.value = "";
+    completionMessage.hidden = true;
+    inputArea.disabled = false;
+    startTime = null;
+    totalErrors = 0;
+    updateStats(0, 100);
   };
 
-  const updateStats = () => {
-    if (!startTime) return;
-    const elapsedTime = (new Date() - startTime) / 1000 / 60; // minutes
-    const wpm = Math.round(correctChars / 5 / elapsedTime);
-    const accuracy = Math.round((correctChars / totalTyped) * 100) || 100;
-    wpmDisplay.textContent = Math.max(wpm, 0);
-    accuracyDisplay.textContent = `${accuracy}%`;
+  const calculateWPM = (elapsedTime) => {
+    const wordsTyped = currentPrompt.length / 5;
+    return Math.max(0, Math.floor(wordsTyped / elapsedTime));
+  };
+
+  const calculateAccuracy = (typedChars) => {
+    const correctChars = typedChars - totalErrors;
+    return Math.max(0, Math.floor((correctChars / typedChars) * 100));
+  };
+
+  const updateStats = (wpm, accuracy) => {
+    wpmEl.textContent = wpm;
+    accuracyEl.textContent = `${accuracy}%`;
   };
 
   inputArea.addEventListener("input", () => {
-    if (!isTyping) return;
-
-    const userInput = inputArea.textContent;
-    const spans = promptElement.querySelectorAll("span");
-
     if (!startTime) startTime = new Date();
 
-    correctChars = 0;
-    totalTyped = userInput.length;
+    const userInput = inputArea.value;
+    const spans = promptEl.querySelectorAll("span");
+    let errors = 0;
 
-    spans.forEach((span, i) => {
-      const typedChar = userInput[i];
-      if (typedChar == null) {
+    spans.forEach((span, index) => {
+      const char = userInput[index];
+
+      if (char == null) {
         span.classList.remove("correct", "incorrect");
-      } else if (typedChar === span.textContent) {
+      } else if (char === span.textContent) {
         span.classList.add("correct");
         span.classList.remove("incorrect");
-        correctChars++;
       } else {
         span.classList.add("incorrect");
         span.classList.remove("correct");
+        errors++;
       }
     });
 
-    updateStats();
+    totalErrors = errors;
+
+    const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
+    const wpm = calculateWPM(elapsedTime);
+    const accuracy = calculateAccuracy(userInput.length);
+
+    updateStats(wpm, accuracy);
 
     if (userInput === currentPrompt) {
-      inputArea.setAttribute("contenteditable", "false");
       completionMessage.hidden = false;
-      isTyping = false;
+      inputArea.disabled = true;
     }
   });
 
-  startButton.addEventListener("click", () => {
-    inputArea.setAttribute("contenteditable", "true");
-    inputArea.focus();
-    isTyping = true;
-    startButton.disabled = true;
-  });
+  refreshButton.addEventListener("click", loadPrompt);
+  nextButton.addEventListener("click", loadPrompt);
 
-  refreshButton.addEventListener("click", () => {
-    loadPrompt(prompts.indexOf(currentPrompt));
-  });
-
-  nextButton.addEventListener("click", () => {
-    const nextIndex = (prompts.indexOf(currentPrompt) + 1) % prompts.length;
-    loadPrompt(nextIndex);
-  });
-
-  loadPrompt(0);
+  loadPrompt();
 });
+
 
 
 
