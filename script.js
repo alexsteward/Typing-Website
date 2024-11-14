@@ -106,46 +106,31 @@ document.addEventListener("DOMContentLoaded", () => {
     // Check for completion (exact match)
     if (userInput === currentPrompt) {
       completed = true;
-      inputArea.disabled = true; // Disable input once prompt is completed
-
-      const elapsedTime = (new Date() - startTime) / 1000 / 60; // Elapsed time in minutes
-      const wpm = calculateWPM(elapsedTime);
-
-      showCompletionMessage(wpm);
+      const elapsedTime = (new Date() - startTime) / 1000 / 60;
+      speedCounter.textContent = calculateWPM(elapsedTime);
+      nextButton.disabled = false; // Enable next button
     }
-
-    // Calculate WPM in real-time
-    const elapsedTime = (new Date() - startTime) / 1000 / 60;
-    speedCounter.textContent = calculateWPM(elapsedTime);
   });
 
-  // Show completion message with WPM and Accuracy
-  const showCompletionMessage = (wpm) => {
-    errorMessage.textContent = `Completed! Your typing speed: ${wpm} WPM, Accuracy: ${calculateAccuracy()}%`;
-    nextButton.disabled = false; // Enable next button after completion
-  };
-
-  // Refresh button event listener
+  // Event listener for the refresh button
   refreshButton.addEventListener("click", () => {
     updatePrompt();
   });
 
-  // Next button event listener
+  // Event listener for the next button
   nextButton.addEventListener("click", () => {
-    // Move to the next prompt
-    const currentIndex = prompts.indexOf(currentPrompt);
-    const nextIndex = (currentIndex + 1) % prompts.length; // Loop back to the start if at the end
-    currentPrompt = prompts[nextIndex];
+    const nextPromptIndex = (prompts.indexOf(currentPrompt) + 1) % prompts.length;
+    currentPrompt = prompts[nextPromptIndex];
     updatePrompt();
-  });
-
-  // Allow user to click to focus the typing input
-  prompt.addEventListener("click", () => {
-    inputArea.focus();
   });
 
   // Initialize the first prompt
   updatePrompt();
+
+  // Make sure user can click anywhere on the prompt to focus typing area
+  prompt.addEventListener("click", () => {
+    inputArea.focus();
+  });
 });
 
 
