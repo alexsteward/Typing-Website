@@ -48,8 +48,8 @@ nav {
 /* Typing Area */
 main #typing-area {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 10px;
   background-color: #16191f;
   padding: 20px;
@@ -57,18 +57,11 @@ main #typing-area {
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
-#arrow {
-  color: #ffcc00;
-  font-size: 18px;
-}
-
 #prompt {
-  display: flex;
-  gap: 2px;
   font-size: 22px;
   line-height: 1.5;
   color: rgba(197, 198, 199, 0.4);
-  white-space: nowrap; /* Keep text on one line */
+  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -82,7 +75,6 @@ main #typing-area {
 }
 
 #input-area {
-  margin-top: 10px;
   width: 100%;
   height: 40px;
   background-color: transparent;
@@ -120,6 +112,7 @@ main #typing-area {
 #controls button:hover {
   background-color: #e6b800;
 }
+
 
 
 
