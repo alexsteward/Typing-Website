@@ -1,125 +1,113 @@
-/* General Reset */
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #0f111a;
-  color: #c5c6c7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  overflow: hidden;
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const promptElement = document.getElementById("prompt");
+  const inputArea = document.getElementById("input-area");
+  const speedCounter = document.getElementById("speed-counter");
+  const accuracyCounter = document.getElementById("accuracy-counter");
+  const refreshButton = document.getElementById("refresh-button");
+  const nextButton = document.getElementById("next-button");
+  const navItems = document.querySelectorAll(".menu-item");
 
-#app {
-  width: 80%;
-  max-width: 900px;
-  text-align: center;
-}
+  let currentPrompt = "";
+  let startTime = null;
+  let incorrectCount = 0;
 
-/* Header Logo */
-header h1#logo {
-  font-size: 24px;
-  font-weight: bold;
-  color: #ffcc00;
-  margin-bottom: 20px;
-}
+  const modes = {
+    punctuation: [
+      "Hello, world!",
+      "It's a great day.",
+      "Don't forget: punctuation matters."
+    ],
+    regular: [
+      "practice typing fast",
+      "the quick brown fox",
+      "coding is fun always"
+    ],
+    numbers: [
+      "12345 67890",
+      "98765 43210",
+      "2468 13579 0"
+    ]
+  };
 
-/* Navigation Menu */
-nav {
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 30px;
-}
+  let selectedMode = "punctuation";
 
-.menu-item {
-  color: #c5c6c7;
-  cursor: pointer;
-  font-size: 14px;
-}
+  const updatePrompt = () => {
+    const prompts = modes[selectedMode];
+    currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+    promptElement.innerHTML = currentPrompt
+      .split("")
+      .map((char) => `<span>${char}</span>`)
+      .join("");
+    inputArea.value = "";
+    startTime = null;
+    incorrectCount = 0;
+    speedCounter.textContent = "0";
+    accuracyCounter.textContent = "100";
+  };
 
-.menu-item.active {
-  color: #ffcc00;
-  text-decoration: underline;
-}
+  const calculateWPM = (elapsedTime) => {
+    const totalChars = currentPrompt.length;
+    return Math.floor((totalChars / 5) / elapsedTime);
+  };
 
-/* Typing Area */
-main #typing-area {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  background-color: #16191f;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-}
+  const calculateAccuracy = () => {
+    const totalChars = currentPrompt.length;
+    const correctChars = totalChars - incorrectCount;
+    return ((correctChars / totalChars) * 100).toFixed(2);
+  };
 
-#arrow {
-  color: #ffcc00;
-  font-size: 18px;
-}
+  inputArea.addEventListener("input", () => {
+    const userInput = inputArea.value;
+    const promptChars = currentPrompt.split("");
+    const spans = promptElement.querySelectorAll("span");
 
-#prompt {
-  display: flex;
-  gap: 2px;
-  font-size: 22px;
-  line-height: 1.5;
-  color: rgba(197, 198, 199, 0.4);
-  white-space: nowrap; /* Keep text on one line */
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+    if (!startTime) startTime = new Date();
 
-#prompt span.correct {
-  color: #ffffff;
-}
+    incorrectCount = 0;
 
-#prompt span.incorrect {
-  color: #ff0000;
-}
+    spans.forEach((span, index) => {
+      const userChar = userInput[index];
+      if (userChar == null) {
+        span.classList.remove("correct", "incorrect");
+      } else if (userChar === span.textContent) {
+        span.classList.add("correct");
+        span.classList.remove("incorrect");
+      } else {
+        span.classList.add("incorrect");
+        span.classList.remove("correct");
+        incorrectCount++;
+      }
+    });
 
-#input-area {
-  margin-top: 10px;
-  width: 100%;
-  height: 40px;
-  background-color: transparent;
-  color: #c5c6c7;
-  font-size: 18px;
-  border: 1px solid #72767d;
-  border-radius: 4px;
-  padding: 5px;
-  outline: none;
-}
+    if (userInput.length === currentPrompt.length) {
+      const elapsedTime = (new Date() - startTime) / 1000 / 60;
+      speedCounter.textContent = calculateWPM(elapsedTime);
+      accuracyCounter.textContent = calculateAccuracy();
+      inputArea.disabled = true;
+    }
+  });
 
-#stats {
-  margin-top: 10px;
-  display: flex;
-  justify-content: space-between;
-  color: #ffcc00;
-  font-size: 16px;
-}
+  refreshButton.addEventListener("click", () => {
+    updatePrompt();
+    inputArea.disabled = false;
+  });
 
-#controls {
-  margin-top: 20px;
-}
+  nextButton.addEventListener("click", () => {
+    updatePrompt();
+    inputArea.disabled = false;
+  });
 
-#controls button {
-  padding: 8px 15px;
-  font-size: 16px;
-  margin: 0 5px;
-  color: #ffffff;
-  background-color: #ffcc00;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-}
+  navItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      navItems.forEach((el) => el.classList.remove("active"));
+      item.classList.add("active");
+      selectedMode = item.id;
+      updatePrompt();
+    });
+  });
 
-#controls button:hover {
-  background-color: #e6b800;
-}
+  updatePrompt();
+});
 
 
 
