@@ -48,6 +48,7 @@ main #typing-area {
   opacity: 0.4;
   color: #c5c6c7;
   transition: opacity 0.2s;
+  user-select: none; /* Disable selection of text */
 }
 
 #prompt span.correct {
