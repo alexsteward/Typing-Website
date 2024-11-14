@@ -7,9 +7,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentPrompt = "";
   let startTime = null;
-  let wordCount = 0;
   let incorrectCount = 0;
 
+  // Prompts for typing
   const modes = {
     words: [
       "give show last would that mean few fact time off",
@@ -18,6 +18,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
+  // Function to load a new prompt
   const updatePrompt = () => {
     const prompts = modes.words;
     currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
@@ -27,48 +28,69 @@ document.addEventListener("DOMContentLoaded", () => {
       .join(" ");
     inputArea.value = "";
     startTime = null;
-    wordCount = currentPrompt.split(" ").length;
     incorrectCount = 0;
     speedCounter.textContent = "0";
   };
 
+  // Function to calculate WPM
+  const calculateWPM = (elapsedTime) => {
+    const wordsTyped = currentPrompt.split(" ").length;
+    const penalty = incorrectCount * 0.5; // Each incorrect word deducts 0.5 WPM
+    const wpm = Math.floor((wordsTyped / elapsedTime) - penalty);
+    return isNaN(wpm) || !isFinite(wpm) ? 0 : Math.max(0, wpm); // Ensure WPM is not negative
+  };
+
+  // Event listener for typing input
   inputArea.addEventListener("input", () => {
-    if (!startTime) startTime = new Date();
-    const words = inputArea.value.trim().split(" ");
+    const userInput = inputArea.value.trim();
+    const words = currentPrompt.split(" ");
+    const userWords = userInput.split(" ");
     const spans = prompt.querySelectorAll("span");
 
+    // Start timer on the first keystroke
+    if (!startTime) startTime = new Date();
+
+    // Reset incorrect count
+    incorrectCount = 0;
+
+    // Compare user input with prompt words
     spans.forEach((span, index) => {
-      const word = words[index];
-      if (!word) {
+      const userWord = userWords[index];
+      if (userWord == null) {
+        // Word not yet typed
         span.classList.remove("correct", "incorrect");
-        return;
-      }
-      if (word === span.textContent) {
+      } else if (userWord === span.textContent) {
+        // Correct word
         span.classList.add("correct");
         span.classList.remove("incorrect");
       } else {
+        // Incorrect word
         span.classList.add("incorrect");
         span.classList.remove("correct");
         incorrectCount++;
       }
     });
 
+    // Calculate elapsed time in minutes
     const elapsedTime = (new Date() - startTime) / 1000 / 60;
-    const correctWords = spans.length - incorrectCount;
-    const speed = Math.floor(correctWords / elapsedTime);
-    speedCounter.textContent = isNaN(speed) || !isFinite(speed) ? "0" : speed;
+    speedCounter.textContent = calculateWPM(elapsedTime);
   });
 
+  // Submit score to leaderboard
   leaderboardForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const name = document.getElementById("name").value;
+    const name = document.getElementById("name").value.trim();
     const score = speedCounter.textContent;
-    leaderboardList.innerHTML += `<li>${name}: ${score} WPM</li>`;
+    if (name) {
+      leaderboardList.innerHTML += `<li>${name}: ${score} WPM</li>`;
+    }
     leaderboardForm.reset();
-    updatePrompt();
+    updatePrompt(); // Load a new prompt after submission
   });
 
+  // Initialize the first prompt
   updatePrompt();
 });
+
 
 
