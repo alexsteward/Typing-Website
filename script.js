@@ -1,90 +1,74 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const menuItems = document.querySelectorAll(".menu-item");
   const prompt = document.getElementById("prompt");
   const inputArea = document.getElementById("input-area");
   const speedCounter = document.getElementById("speed-counter");
+  const leaderboardForm = document.getElementById("leaderboard-form");
+  const leaderboardList = document.getElementById("leaderboard-list");
 
-  // Typing Modes
+  let currentPrompt = "";
+  let startTime = null;
+  let wordCount = 0;
+  let incorrectCount = 0;
+
   const modes = {
-    punctuation: [
-      "Hello, world!",
-      "Do you know the time?",
-      "Why? Because I said so.",
-      "Oh, no! The cat's outside.",
-    ],
-    numbers: [
-      "123 456 789 101",
-      "2023 1987 42 7",
-      "1 2 3 4 5 6 7 8 9",
-    ],
-    time: [
-      "Type as much as you can in 30 seconds.",
-      "Keep going until the timer runs out.",
-    ],
     words: [
       "give show last would that mean few fact time off",
       "the quick brown fox jumps over the lazy dog",
       "coding is fun and typing helps build skill",
     ],
-    quote: [
-      "To be or not to be, that is the question.",
-      "All that glitters is not gold.",
-      "A journey of a thousand miles begins with a single step.",
-    ],
   };
 
-  // Default mode
-  let currentMode = "words";
-  let currentPrompt = "";
-
-  // Typing Speed Calculation
-  let startTime = null;
-  let wordCount = 0;
-
-  // Function to update prompt
   const updatePrompt = () => {
-    const prompts = modes[currentMode];
+    const prompts = modes.words;
     currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-    prompt.textContent = currentPrompt;
+    prompt.innerHTML = currentPrompt
+      .split(" ")
+      .map((word) => `<span>${word}</span>`)
+      .join(" ");
     inputArea.value = "";
     startTime = null;
     wordCount = currentPrompt.split(" ").length;
+    incorrectCount = 0;
     speedCounter.textContent = "0";
   };
 
-  // Handle menu clicks
-  menuItems.forEach((item) => {
-    item.addEventListener("click", () => {
-      // Remove active class from all
-      menuItems.forEach((menu) => menu.classList.remove("active"));
-      // Set active class to clicked item
-      item.classList.add("active");
-
-      // Update current mode
-      currentMode = item.id;
-      updatePrompt();
-    });
-  });
-
-  // Typing Speed Counter
   inputArea.addEventListener("input", () => {
-    if (!startTime) {
-      startTime = new Date();
-    }
-    const inputText = inputArea.value.trim();
-    const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
-    const typedWords = inputText.split(" ").length;
-    const speed = Math.floor(typedWords / elapsedTime);
-    speedCounter.textContent = isNaN(speed) || !isFinite(speed) ? "0" : speed;
+    if (!startTime) startTime = new Date();
+    const words = inputArea.value.trim().split(" ");
+    const spans = prompt.querySelectorAll("span");
 
-    // Check if completed
-    if (inputText === currentPrompt) {
-      alert("You completed the prompt!");
-      updatePrompt();
-    }
+    spans.forEach((span, index) => {
+      const word = words[index];
+      if (!word) {
+        span.classList.remove("correct", "incorrect");
+        return;
+      }
+      if (word === span.textContent) {
+        span.classList.add("correct");
+        span.classList.remove("incorrect");
+      } else {
+        span.classList.add("incorrect");
+        span.classList.remove("correct");
+        incorrectCount++;
+      }
+    });
+
+    const elapsedTime = (new Date() - startTime) / 1000 / 60;
+    const correctWords = spans.length - incorrectCount;
+    const speed = Math.floor(correctWords / elapsedTime);
+    speedCounter.textContent = isNaN(speed) || !isFinite(speed) ? "0" : speed;
   });
 
-  // Initialize first prompt
+  leaderboardForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const name = document.getElementById("name").value;
+    const score = speedCounter.textContent;
+    leaderboardList.innerHTML += `<li>${name}: ${score} WPM</li>`;
+    leaderboardForm.reset();
+    updatePrompt();
+  });
+
   updatePrompt();
 });
+
 
