@@ -2,8 +2,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const prompt = document.getElementById("prompt");
   const inputArea = document.getElementById("input-area");
   const speedCounter = document.getElementById("speed-counter");
-  const leaderboardForm = document.getElementById("leaderboard-form");
-  const leaderboardList = document.getElementById("leaderboard-list");
   const errorMessage = document.getElementById("error-message");
 
   let currentPrompt = "";
@@ -11,6 +9,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let incorrectCount = 0;
   let completed = false;
 
+  // Typing modes
   const modes = {
     words: [
       "give show last would that mean few fact time off",
@@ -115,18 +114,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.removeChild(modal);
     });
   };
-
-  // Submit score to leaderboard
-  leaderboardForm.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const name = document.getElementById("name").value.trim();
-    const score = speedCounter.textContent;
-    if (name) {
-      leaderboardList.innerHTML += `<li>${name}: ${score} WPM</li>`;
-    }
-    leaderboardForm.reset();
-    updatePrompt();
-  });
 
   // Mode switchers
   document.querySelectorAll(".menu-item").forEach(item => {
