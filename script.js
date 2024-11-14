@@ -1,107 +1,110 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const promptEl = document.getElementById("prompt");
+  const promptElement = document.getElementById("prompt");
   const inputArea = document.getElementById("input-area");
-  const completionMessage = document.getElementById("completion-message");
-  const refreshButton = document.getElementById("refresh");
-  const nextButton = document.getElementById("next");
-  const wpmEl = document.getElementById("wpm");
-  const accuracyEl = document.getElementById("accuracy-value");
+  const speedCounter = document.getElementById("speed-counter");
+  const accuracyCounter = document.getElementById("accuracy-counter");
+  const navItems = document.querySelectorAll(".menu-item");
 
   let currentPrompt = "";
   let startTime = null;
-  let errorIndices = new Set(); // Tracks indices of errors for accuracy
-  let charactersTyped = 0;
+  let incorrectCount = 0;
 
-  const prompts = [
-    "The quick brown fox jumps over the lazy dog.",
-    "Typing is fun and improves your speed.",
-    "Accuracy and consistency are key.",
-    "Test your skills with this challenge."
-  ];
+  // Prompts for different modes
+  const modes = {
+    punctuation: [
+      "Hello, world! Can you type this accurately?",
+      "It's a great day; let's practice typing!",
+      "Don't forget: punctuation matters, even in simple sentences.",
+    ],
+    regular: [
+      "practice typing to improve skill",
+      "the quick brown fox jumps over",
+      "coding is fun and improves speed"
+    ],
+    numbers: [
+      "12345 67890",
+      "98765 43210",
+      "2468 13579 0"
+    ]
+  };
 
-  // Load a new prompt
-  const loadPrompt = () => {
+  let selectedMode = "punctuation";
+
+  // Update the prompt
+  const updatePrompt = () => {
+    const prompts = modes[selectedMode];
     currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-    promptEl.innerHTML = currentPrompt
+    promptElement.innerHTML = currentPrompt
       .split("")
       .map((char) => `<span>${char}</span>`)
       .join("");
     inputArea.value = "";
-    completionMessage.hidden = true;
-    inputArea.disabled = false;
     startTime = null;
-    errorIndices.clear();
-    charactersTyped = 0;
-    updateStats(0, 100);
+    incorrectCount = 0;
+    speedCounter.textContent = "0";
+    accuracyCounter.textContent = "100";
   };
 
-  // Calculate Words Per Minute (WPM)
+  // Calculate WPM
   const calculateWPM = (elapsedTime) => {
-    const wordsTyped = currentPrompt.length / 5;
-    return Math.max(0, Math.floor(wordsTyped / elapsedTime));
+    const totalChars = currentPrompt.length;
+    const penalty = incorrectCount * 0.5; // Deduction per incorrect character
+    const wpm = Math.floor(((totalChars / 5) / elapsedTime) - penalty);
+    return Math.max(0, wpm); // Ensure WPM is not negative
   };
 
-  // Calculate Accuracy
+  // Calculate accuracy
   const calculateAccuracy = () => {
     const totalChars = currentPrompt.length;
-    const incorrectChars = errorIndices.size;
-    const correctChars = totalChars - incorrectChars;
-    return Math.max(0, Math.floor((correctChars / totalChars) * 100));
+    const correctChars = totalChars - incorrectCount;
+    return ((correctChars / totalChars) * 100).toFixed(2);
   };
 
-  // Update WPM and Accuracy
-  const updateStats = (wpm, accuracy) => {
-    wpmEl.textContent = wpm;
-    accuracyEl.textContent = `${accuracy}%`;
-  };
-
-  // Input event listener
+  // Handle typing input
   inputArea.addEventListener("input", () => {
+    const userInput = inputArea.value;
+    const promptChars = currentPrompt.split("");
+    const spans = promptElement.querySelectorAll("span");
+
     if (!startTime) startTime = new Date();
 
-    const userInput = inputArea.value;
-    const spans = promptEl.querySelectorAll("span");
-
-    errorIndices.clear(); // Reset error tracking for this evaluation
+    incorrectCount = 0;
 
     spans.forEach((span, index) => {
-      const char = userInput[index];
-
-      if (char == null) {
+      const userChar = userInput[index];
+      if (userChar == null) {
         span.classList.remove("correct", "incorrect");
-      } else if (char === span.textContent) {
+      } else if (userChar === span.textContent) {
         span.classList.add("correct");
         span.classList.remove("incorrect");
       } else {
         span.classList.add("incorrect");
         span.classList.remove("correct");
-        errorIndices.add(index); // Mark this index as an error
+        incorrectCount++;
       }
     });
 
-    charactersTyped = userInput.length;
-
-    // Calculate WPM and accuracy
-    const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
-    const wpm = calculateWPM(elapsedTime);
-    const accuracy = calculateAccuracy();
-
-    updateStats(wpm, accuracy);
-
-    // Check if the prompt is fully typed
-    if (userInput.length === currentPrompt.length) {
-      completionMessage.hidden = false;
-      inputArea.disabled = true; // Disable input after completion
+    if (userInput === currentPrompt) {
+      const elapsedTime = (new Date() - startTime) / 1000 / 60;
+      speedCounter.textContent = calculateWPM(elapsedTime);
+      accuracyCounter.textContent = calculateAccuracy();
+      inputArea.disabled = true;
     }
   });
 
-  // Button event listeners
-  refreshButton.addEventListener("click", loadPrompt);
-  nextButton.addEventListener("click", loadPrompt);
+  // Mode navigation
+  navItems.forEach((item) => {
+    item.addEventListener("click", () => {
+      navItems.forEach((el) => el.classList.remove("active"));
+      item.classList.add("active");
+      selectedMode = item.id;
+      updatePrompt();
+    });
+  });
 
-  // Initialize
-  loadPrompt();
+  updatePrompt();
 });
+
 
 
 
