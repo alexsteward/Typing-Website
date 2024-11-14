@@ -57,36 +57,29 @@ main #typing-area {
   font-size: 22px;
   margin-bottom: 20px;
   line-height: 1.5;
-  color: #ffffff;
   text-align: left;
 }
 
 #prompt span {
   opacity: 0.4;
+  color: #c5c6c7;
   transition: opacity 0.2s;
 }
 
 #prompt span.correct {
-  color: #ffffff;
   opacity: 1;
+  color: #ffffff;
 }
 
 #prompt span.incorrect {
-  color: #ff0000;
   opacity: 1;
+  color: #ff0000;
 }
 
 #input-area {
-  width: 100%;
-  height: 40px;
-  background-color: transparent;
-  color: #c5c6c7;
-  font-size: 18px;
-  border: none;
-  outline: none;
-  border-bottom: 2px solid #ffcc00;
-  resize: none;
-  padding: 5px;
+  position: absolute;
+  top: -9999px; /* Hide the textarea off-screen */
+  opacity: 0;   /* Make it invisible */
 }
 
 #input-area:disabled {
