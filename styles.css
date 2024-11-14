@@ -13,14 +13,14 @@ body, html {
 }
 
 #app {
-  width: 70%;
-  max-width: 800px;
+  width: 80%;
+  max-width: 900px;
   text-align: center;
 }
 
 /* Header Logo */
 header h1#logo {
-  font-size: 36px;
+  font-size: 24px;
   font-weight: bold;
   color: #ffcc00;
   margin-bottom: 20px;
@@ -58,6 +58,7 @@ main #typing-area {
   margin-bottom: 20px;
   line-height: 1.5;
   color: #ffffff;
+  text-align: left;
 }
 
 #input-area {
@@ -69,7 +70,7 @@ main #typing-area {
   border: none;
   outline: none;
   border-bottom: 2px solid #ffcc00;
-  text-align: center;
+  text-align: left;
   padding: 5px;
 }
 
@@ -81,3 +82,4 @@ footer {
   color: #72767d;
   font-size: 14px;
 }
+
