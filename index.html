@@ -8,29 +8,36 @@
 </head>
 <body>
   <div id="app">
+    <!-- Centered Logo -->
     <header>
-      <span class="logo">LegacyType</span>
-      <div class="menu">
-        <span># punctuation</span>
-        <span># numbers</span>
-        <span># time</span>
-        <span class="active"># words</span>
-        <span># quote</span>
-      </div>
+      <h1 id="logo">LegacyType</h1>
     </header>
+
+    <!-- Menu Options -->
+    <nav>
+      <span id="punctuation" class="menu-item"># punctuation</span>
+      <span id="numbers" class="menu-item"># numbers</span>
+      <span id="time" class="menu-item"># time</span>
+      <span id="words" class="menu-item active"># words</span>
+      <span id="quote" class="menu-item"># quote</span>
+    </nav>
+
+    <!-- Typing Section -->
     <main>
       <div id="typing-area">
-        <div id="prompt">
-          give show last would that mean few fact time off
-        </div>
+        <div id="prompt"></div>
         <textarea id="input-area" autofocus></textarea>
       </div>
-      <footer>
-        <span>english</span>
-        <span>pb pace 165 wpm</span>
-      </footer>
     </main>
+
+    <!-- Footer -->
+    <footer>
+      <span id="language">english</span>
+      <span id="pace">pb pace 165 wpm</span>
+    </footer>
   </div>
+
   <script src="script.js"></script>
 </body>
 </html>
+
