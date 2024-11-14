@@ -116,7 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
       inputArea.setAttribute("contenteditable", "true");
       inputArea.focus();
       isTyping = true;
-      refreshButton.disabled = true;
+      refreshButton.disabled = false;
       nextButton.disabled = true;
     }
   });
