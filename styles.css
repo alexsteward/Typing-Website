@@ -73,6 +73,12 @@ body, html {
   background-color: #ff9900;
 }
 
+.control-button:disabled {
+  background-color: #777;
+  cursor: not-allowed;
+}
+
+
 
 
 
