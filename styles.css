@@ -101,6 +101,25 @@ main #typing-area {
   font-size: 16px;
 }
 
+#controls {
+  margin-top: 20px;
+}
+
+#controls button {
+  padding: 8px 15px;
+  font-size: 16px;
+  margin: 0 5px;
+  color: #ffffff;
+  background-color: #ffcc00;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#controls button:hover {
+  background-color: #e6b800;
+}
+
 
 
 
