@@ -37,9 +37,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(0, Math.floor(wordsTyped / elapsedTime));
   };
 
-  const calculateAccuracy = (typedChars) => {
-    const correctChars = typedChars - totalErrors;
-    return Math.max(0, Math.floor((correctChars / typedChars) * 100));
+  const calculateAccuracy = (totalTyped) => {
+    const correctTyped = totalTyped - totalErrors;
+    return Math.max(0, Math.floor((correctTyped / totalTyped) * 100));
   };
 
   const updateStats = (wpm, accuracy) => {
@@ -88,6 +88,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadPrompt();
 });
+
 
 
 
