@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const menuItems = document.querySelectorAll(".menu-item");
   const prompt = document.getElementById("prompt");
   const inputArea = document.getElementById("input-area");
+  const speedCounter = document.getElementById("speed-counter");
 
   // Typing Modes
   const modes = {
@@ -36,12 +37,19 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentMode = "words";
   let currentPrompt = "";
 
+  // Typing Speed Calculation
+  let startTime = null;
+  let wordCount = 0;
+
   // Function to update prompt
   const updatePrompt = () => {
     const prompts = modes[currentMode];
     currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
     prompt.textContent = currentPrompt;
     inputArea.value = "";
+    startTime = null;
+    wordCount = currentPrompt.split(" ").length;
+    speedCounter.textContent = "0";
   };
 
   // Handle menu clicks
@@ -58,9 +66,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // Check input matches the prompt
+  // Typing Speed Counter
   inputArea.addEventListener("input", () => {
+    if (!startTime) {
+      startTime = new Date();
+    }
     const inputText = inputArea.value.trim();
+    const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
+    const typedWords = inputText.split(" ").length;
+    const speed = Math.floor(typedWords / elapsedTime);
+    speedCounter.textContent = isNaN(speed) || !isFinite(speed) ? "0" : speed;
+
+    // Check if completed
     if (inputText === currentPrompt) {
       alert("You completed the prompt!");
       updatePrompt();
@@ -70,3 +87,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize first prompt
   updatePrompt();
 });
+
