@@ -29,8 +29,6 @@ document.addEventListener("DOMContentLoaded", () => {
     inputArea.textContent = "";
     inputArea.setAttribute("contenteditable", "false");
     isTyping = false;
-    refreshButton.disabled = true;
-    nextButton.disabled = true;
   };
 
   const loadPrompt = (index) => {
@@ -81,8 +79,6 @@ document.addEventListener("DOMContentLoaded", () => {
     if (userInput === currentPrompt) {
       inputArea.setAttribute("contenteditable", "false");
       completionMessage.hidden = false;
-      refreshButton.disabled = false;
-      nextButton.disabled = false;
       isTyping = false;
     }
   });
@@ -101,13 +97,12 @@ document.addEventListener("DOMContentLoaded", () => {
       inputArea.setAttribute("contenteditable", "true");
       inputArea.focus();
       isTyping = true;
-      refreshButton.disabled = true;
-      nextButton.disabled = true;
     }
   });
 
   loadPrompt(0);
 });
+
 
 
 
