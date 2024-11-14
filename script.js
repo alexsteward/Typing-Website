@@ -23,9 +23,9 @@ document.addEventListener("DOMContentLoaded", () => {
     const prompts = modes.words;
     currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
     prompt.innerHTML = currentPrompt
-      .split(" ")
-      .map((word) => `<span>${word}</span>`)
-      .join(" ");
+      .split("")
+      .map((char) => `<span>${char}</span>`)
+      .join("");
     inputArea.value = "";
     startTime = null;
     incorrectCount = 0;
@@ -34,17 +34,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to calculate WPM
   const calculateWPM = (elapsedTime) => {
-    const wordsTyped = currentPrompt.split(" ").length;
-    const penalty = incorrectCount * 0.5; // Each incorrect word deducts 0.5 WPM
-    const wpm = Math.floor((wordsTyped / elapsedTime) - penalty);
+    const totalChars = currentPrompt.length;
+    const penalty = incorrectCount * 0.5; // Each incorrect character deducts 0.5 WPM
+    const wpm = Math.floor(((totalChars / 5) / elapsedTime) - penalty);
     return isNaN(wpm) || !isFinite(wpm) ? 0 : Math.max(0, wpm); // Ensure WPM is not negative
   };
 
   // Event listener for typing input
   inputArea.addEventListener("input", () => {
-    const userInput = inputArea.value.trim();
-    const words = currentPrompt.split(" ");
-    const userWords = userInput.split(" ");
+    const userInput = inputArea.value;
+    const promptChars = currentPrompt.split("");
     const spans = prompt.querySelectorAll("span");
 
     // Start timer on the first keystroke
@@ -53,18 +52,18 @@ document.addEventListener("DOMContentLoaded", () => {
     // Reset incorrect count
     incorrectCount = 0;
 
-    // Compare user input with prompt words
+    // Compare user input with prompt characters
     spans.forEach((span, index) => {
-      const userWord = userWords[index];
-      if (userWord == null) {
-        // Word not yet typed
+      const userChar = userInput[index];
+      if (userChar == null) {
+        // Character not yet typed
         span.classList.remove("correct", "incorrect");
-      } else if (userWord === span.textContent) {
-        // Correct word
+      } else if (userChar === span.textContent) {
+        // Correct character
         span.classList.add("correct");
         span.classList.remove("incorrect");
       } else {
-        // Incorrect word
+        // Incorrect character
         span.classList.add("incorrect");
         span.classList.remove("correct");
         incorrectCount++;
@@ -91,6 +90,5 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize the first prompt
   updatePrompt();
 });
-
 
 
