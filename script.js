@@ -1,79 +1,109 @@
-/* General Reset */
-body, html {
-  margin: 0;
-  padding: 0;
-  font-family: 'Arial', sans-serif;
-  background-color: #0f111a;
-  color: #c5c6c7;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-}
+document.addEventListener("DOMContentLoaded", () => {
+  const prompt = document.getElementById("prompt");
+  const inputArea = document.getElementById("input-area");
+  const speedCounter = document.getElementById("speed-counter");
+  const accuracyCounter = document.getElementById("accuracy-counter");
+  const errorMessage = document.getElementById("error-message");
+  const refreshButton = document.getElementById("refresh-button");
+  const nextButton = document.getElementById("next-button");
 
-#app {
-  width: 80%;
-  max-width: 600px;
-  text-align: center;
-}
+  const prompts = [
+    "Type this sentence exactly.",
+    "The quick brown fox jumps over the lazy dog.",
+    "Coding is fun and typing helps build skill.",
+    "Hello world! This is a typing test.",
+    "I am learning to type faster and more accurately."
+  ];
 
-/* Typing Area */
-#prompt-area {
-  margin-bottom: 20px;
-}
+  let currentPrompt = prompts[0];
+  let startTime = null;
+  let completed = false;
+  let correctCount = 0;
 
-#prompt {
-  font-size: 18px;
-  color: #ffffff;
-  line-height: 1.5;
-}
+  // Function to calculate WPM
+  const calculateWPM = (elapsedTime) => {
+    const totalChars = currentPrompt.length;
+    const wpm = Math.floor(((totalChars / 5) / elapsedTime)); // Simple WPM formula
+    return isNaN(wpm) || !isFinite(wpm) ? 0 : Math.max(0, wpm);
+  };
 
-#input-area {
-  width: 100%;
-  height: 100px;
-  background-color: #16191f;
-  color: #ffffff;
-  font-size: 18px;
-  padding: 10px;
-  border: none;
-  outline: none;
-  border-radius: 8px;
-}
+  // Function to calculate accuracy
+  const calculateAccuracy = () => {
+    const accuracy = (correctCount / currentPrompt.length) * 100;
+    return accuracy.toFixed(2);
+  };
 
-#speed-info {
-  margin-top: 20px;
-  font-size: 16px;
-  color: #ffcc00;
-}
+  // Function to update the prompt
+  const updatePrompt = () => {
+    completed = false;
+    correctCount = 0;
+    inputArea.disabled = false; // Enable the input area
+    inputArea.value = ""; // Clear input area
+    prompt.textContent = currentPrompt; // Set the prompt text
+    errorMessage.textContent = ""; // Clear error message
+    speedCounter.textContent = "0"; // Reset WPM counter
+    accuracyCounter.textContent = "100%"; // Reset accuracy
+    startTime = null; // Reset the timer
+    nextButton.disabled = true; // Disable next button initially
+  };
 
-#error-message {
-  color: #ff0000;
-  font-size: 14px;
-  margin-top: 5px;
-}
+  // Event listener for typing input
+  inputArea.addEventListener("input", () => {
+    if (completed) return;
 
-/* Control Buttons */
-#controls {
-  margin-top: 20px;
-  display: flex;
-  justify-content: center;
-  gap: 20px;
-}
+    const userInput = inputArea.value;
 
-.control-button {
-  font-size: 20px;
-  padding: 10px;
-  background-color: #ffcc00;
-  border: none;
-  cursor: pointer;
-  border-radius: 8px;
-}
+    // Start timer on first keystroke
+    if (!startTime) startTime = new Date();
 
-.control-button:hover {
-  background-color: #ff9900;
-}
+    // Calculate correct characters count
+    correctCount = 0;
+    for (let i = 0; i < userInput.length; i++) {
+      if (userInput[i] === currentPrompt[i]) {
+        correctCount++;
+      }
+    }
 
-.control-button:disabled {
-  background-color: #777;
-  cursor: not-allowed;
-}
+    // Update accuracy
+    accuracyCounter.textContent = `${calculateAccuracy()}%`;
+
+    // Check for completion (exact match)
+    if (userInput === currentPrompt) {
+      completed = true;
+      inputArea.disabled = true; // Disable input once prompt is completed
+
+      const elapsedTime = (new Date() - startTime) / 1000 / 60; // Elapsed time in minutes
+      const wpm = calculateWPM(elapsedTime);
+
+      showCompletionMessage(wpm);
+    }
+
+    // Calculate WPM in real-time
+    const elapsedTime = (new Date() - startTime) / 1000 / 60;
+    speedCounter.textContent = calculateWPM(elapsedTime);
+  });
+
+  // Show completion message with WPM and Accuracy
+  const showCompletionMessage = (wpm) => {
+    errorMessage.textContent = `Completed! Your typing speed: ${wpm} WPM, Accuracy: ${calculateAccuracy()}%`;
+    nextButton.disabled = false; // Enable next button after completion
+  };
+
+  // Refresh button event listener
+  refreshButton.addEventListener("click", () => {
+    updatePrompt();
+  });
+
+  // Next button event listener
+  nextButton.addEventListener("click", () => {
+    // Move to the next prompt
+    const currentIndex = prompts.indexOf(currentPrompt);
+    const nextIndex = (currentIndex + 1) % prompts.length; // Loop back to the start if at the end
+    currentPrompt = prompts[nextIndex];
+    updatePrompt();
+  });
+
+  // Initialize the first prompt
+  updatePrompt();
+});
+
