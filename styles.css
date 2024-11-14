@@ -28,11 +28,19 @@ header h1 {
   position: relative;
 }
 
+#prompt-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
 #prompt {
   font-size: 18px;
   white-space: pre-wrap;
   color: #c5c6c7;
   opacity: 0.4;
+  flex: 1;
+  text-align: left;
 }
 
 #prompt span.correct {
@@ -43,6 +51,20 @@ header h1 {
 #prompt span.incorrect {
   color: red;
   opacity: 1;
+}
+
+#start-button {
+  background: none;
+  border: none;
+  color: #ffcc00;
+  font-size: 20px;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+#start-button:disabled {
+  color: #555;
+  cursor: not-allowed;
 }
 
 #input-area {
@@ -90,6 +112,7 @@ button:disabled {
 #pace, #accuracy {
   font-size: 14px;
 }
+
 
 
 
