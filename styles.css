@@ -62,6 +62,12 @@ header h1 {
   white-space: pre-wrap;
 }
 
+#completion-message {
+  font-size: 18px;
+  color: #00ff00;
+  margin-top: 10px;
+}
+
 #stats {
   display: flex;
   justify-content: space-between;
