@@ -15,19 +15,20 @@
       <div id="prompt-container">
         <div id="prompt-header">
           <div id="prompt" class="prompt"></div>
-          <button id="start-button" title="Click to start typing">→</button>
+          <button id="start-button" title="For aesthetics only">→</button>
         </div>
-        <div id="input-area" contenteditable="false"></div>
         <div id="completion-message" hidden>Completed!</div>
       </div>
       <div id="stats">
-        <button id="refresh">↺</button>
-        <button id="next">→</button>
+        <button id="refresh" title="Restart current prompt">↺</button>
+        <button id="next" title="Move to next prompt">→</button>
         <div id="pace">WPM: <span id="wpm">0</span></div>
-        <div id="accuracy">Accuracy: <span id="accuracy-score">100%</span></div>
+        <div id="accuracy">Accuracy: <span id="accuracy-value">100%</span></div>
       </div>
+      <textarea id="input-area" autofocus></textarea>
     </main>
   </div>
   <script src="script.js"></script>
 </body>
 </html>
+
