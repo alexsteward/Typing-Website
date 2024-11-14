@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let startTime = null;
   let completed = false;
   let correctCount = 0;
+  let incorrectCount = 0;
   let userInput = "";
 
   // Function to calculate WPM
@@ -30,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Function to calculate accuracy
   const calculateAccuracy = () => {
-    const accuracy = (correctCount / currentPrompt.length) * 100;
+    const accuracy = ((correctCount / (correctCount + incorrectCount)) * 100) || 100;
     return accuracy.toFixed(2);
   };
 
@@ -38,6 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const updatePrompt = () => {
     completed = false;
     correctCount = 0;
+    incorrectCount = 0;
     userInput = ""; // Reset user input
     inputArea.disabled = false; // Enable the input area
     inputArea.value = ""; // Clear input area
@@ -61,6 +63,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Check the input against the prompt character by character
     correctCount = 0;
+    incorrectCount = 0;
     let allCorrect = true;
     for (let i = 0; i < userInput.length; i++) {
       const inputChar = userInput[i];
@@ -68,6 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (inputChar === promptChar) {
         correctCount++;
       } else {
+        incorrectCount++;
         allCorrect = false;
       }
     }
@@ -122,5 +126,6 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize the first prompt
   updatePrompt();
 });
+
 
 
