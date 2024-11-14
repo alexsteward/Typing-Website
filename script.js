@@ -90,5 +90,3 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize the first prompt
   updatePrompt();
 });
-
-
