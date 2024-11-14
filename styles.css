@@ -23,24 +23,14 @@ header h1 {
 }
 
 #prompt-container {
-  margin-bottom: 20px;
-}
-
-#prompt-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  gap: 10px;
 }
 
-.prompt {
-  font-size: 20px;
-  padding: 10px;
-  border-radius: 8px;
-  background-color: #16191f;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-#start-button {
+#start-arrow {
   font-size: 20px;
   background-color: #ffcc00;
   border: none;
@@ -50,10 +40,35 @@ header h1 {
   color: black;
 }
 
+.prompt {
+  font-size: 20px;
+  border-radius: 8px;
+  background-color: #16191f;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 10px;
+  display: inline-block;
+  width: auto;
+}
+
+.prompt span {
+  opacity: 0.4;
+  color: #c5c6c7;
+}
+
+.prompt span.correct {
+  opacity: 1;
+  color: #ffffff;
+}
+
+.prompt span.incorrect {
+  opacity: 1;
+  color: #ff0000;
+}
+
 #completion-message {
   font-size: 18px;
   color: #00ff00;
-  margin-top: 10px;
+  margin-left: 10px;
 }
 
 #stats {
@@ -92,6 +107,7 @@ button:hover {
   background-color: #272b36;
   color: #a1a1a1;
 }
+
 
 
 
