@@ -47,18 +47,14 @@ nav {
 
 /* Typing Area */
 main #typing-area {
-  background-color: #16191f;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-}
-
-.prompt-line {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  font-size: 22px;
+  background-color: #16191f;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
 }
 
 #arrow {
@@ -67,9 +63,14 @@ main #typing-area {
 }
 
 #prompt {
+  display: flex;
+  gap: 2px;
   font-size: 22px;
   line-height: 1.5;
   color: rgba(197, 198, 199, 0.4);
+  white-space: nowrap; /* Keep text on one line */
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 #prompt span.correct {
@@ -119,6 +120,7 @@ main #typing-area {
 #controls button:hover {
   background-color: #e6b800;
 }
+
 
 
 
