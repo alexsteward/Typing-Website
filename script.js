@@ -122,8 +122,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const elapsedTime = (new Date() - startTime) / 1000 / 60;
     speedCounter.textContent = calculateWPM(elapsedTime);
 
-    // Check if user has completed the prompt
-    if (userInput === currentPrompt && !completed) {
+    // Check if user has completed the prompt (no mistakes)
+    if (userInput === currentPrompt && incorrectCount === 0 && !completed) {
       completed = true; // Mark as completed
       inputArea.disabled = true; // Disable further typing
       const accuracy = Math.floor(((userInput.length - incorrectCount) / userInput.length) * 100);
@@ -147,3 +147,4 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize the first prompt
   updatePrompt();
 });
+
