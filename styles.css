@@ -182,4 +182,51 @@ footer {
   margin-bottom: 10px;
 }
 
+/* Modal Styling */
+#completion-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background-color: #2f343f;
+  padding: 20px;
+  border-radius: 8px;
+  text-align: center;
+  color: #fff;
+  width: 300px;
+}
+
+#completion-modal h3 {
+  font-size: 20px;
+}
+
+#completion-modal p {
+  font-size: 16px;
+}
+
+#speed-graph {
+  margin-top: 20px;
+  max-width: 200px;
+  height: 100px;
+  margin: 0 auto;
+}
+
+#close-modal {
+  background-color: #ffcc00;
+  border: none;
+  padding: 5px 10px;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
 
