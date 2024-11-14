@@ -33,6 +33,7 @@ document.addEventListener("DOMContentLoaded", () => {
     incorrectCount = 0;
     speedCounter.textContent = "0";
     completed = false; // Reset completion status
+    inputArea.disabled = false; // Re-enable the input area after a reset
   };
 
   // Function to calculate WPM
@@ -87,6 +88,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Event listener for typing input
   inputArea.addEventListener("input", () => {
+    if (completed) return; // Prevent further input after completion
+
     const userInput = inputArea.value;
     const promptChars = currentPrompt.split("");
     const spans = prompt.querySelectorAll("span");
@@ -122,6 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Check if user has completed the prompt
     if (userInput === currentPrompt && !completed) {
       completed = true; // Mark as completed
+      inputArea.disabled = true; // Disable further typing
       const accuracy = Math.floor(((userInput.length - incorrectCount) / userInput.length) * 100);
       const wpm = calculateWPM(elapsedTime);
       showCompletionGUI(wpm, accuracy); // Show the GUI with stats
