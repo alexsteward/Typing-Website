@@ -52,6 +52,26 @@ body, html {
   margin-top: 5px;
 }
 
+/* Control Buttons */
+#controls {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.control-button {
+  font-size: 20px;
+  padding: 10px;
+  background-color: #ffcc00;
+  border: none;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.control-button:hover {
+  background-color: #ff9900;
+}
 
 
 
