@@ -78,6 +78,23 @@ body, html {
   cursor: not-allowed;
 }
 
+/* Error Highlight */
+#input-area:invalid {
+  border: 2px solid red;
+}
+
+.correct {
+  color: green;
+}
+
+.incorrect {
+  color: red;
+}
+
+.cursor-lock {
+  pointer-events: none;
+}
+
 
 
 
