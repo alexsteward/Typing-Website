@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const accuracyDisplay = document.getElementById("accuracy-score");
   const refreshButton = document.getElementById("refresh");
   const nextButton = document.getElementById("next");
+  const completionMessage = document.getElementById("completion-message");
 
   let prompts = [
     "The quick brown fox jumps over the lazy dog.",
@@ -16,6 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let startTime = null;
   let correctChars = 0;
   let totalTyped = 0;
+  let isTyping = false;
 
   // Helper: Reset prompt and stats
   const resetStats = () => {
@@ -24,6 +26,11 @@ document.addEventListener("DOMContentLoaded", () => {
     totalTyped = 0;
     wpmDisplay.textContent = "0";
     accuracyDisplay.textContent = "100%";
+    completionMessage.hidden = true;
+    inputArea.setAttribute("contenteditable", "true");
+    isTyping = false;
+    refreshButton.disabled = false;
+    nextButton.disabled = false;
   };
 
   // Load a new prompt
@@ -35,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .map((char) => `<span>${char}</span>`)
       .join("");
     inputArea.textContent = "";
+    refreshButton.disabled = true;
     nextButton.disabled = true;
   };
 
@@ -50,6 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Event listener for typing
   inputArea.addEventListener("input", (e) => {
+    if (!isTyping) return;
     const inputText = e.target.textContent;
     const spans = promptElement.querySelectorAll("span");
 
@@ -81,6 +90,9 @@ document.addEventListener("DOMContentLoaded", () => {
     // Check if the prompt is complete
     if (inputText === currentPrompt) {
       inputArea.setAttribute("contenteditable", "false");
+      completionMessage.hidden = false;
+      isTyping = false;
+      refreshButton.disabled = false;
       nextButton.disabled = false;
     }
   });
@@ -100,10 +112,16 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Allow focus by clicking on prompt
   promptElement.addEventListener("click", () => {
-    inputArea.setAttribute("contenteditable", "true");
-    inputArea.focus();
+    if (!isTyping) {
+      inputArea.setAttribute("contenteditable", "true");
+      inputArea.focus();
+      isTyping = true;
+      refreshButton.disabled = true;
+      nextButton.disabled = true;
+    }
   });
 });
+
 
 
 
