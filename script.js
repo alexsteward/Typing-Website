@@ -21,11 +21,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const loadPrompt = () => {
     currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-    promptEl.innerHTML = `<span id="start-arrow">→</span>` + 
-      currentPrompt
-        .split("")
-        .map((char) => `<span>${char}</span>`)
-        .join("");
+    promptEl.innerHTML = currentPrompt
+      .split("")
+      .map((char) => `<span>${char}</span>`)
+      .join("");
     inputArea.value = "";
     completionMessage.hidden = true;
     inputArea.disabled = false;
@@ -92,6 +91,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadPrompt();
 });
+
 
 
 
