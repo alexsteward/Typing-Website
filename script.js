@@ -1,137 +1,110 @@
 document.addEventListener("DOMContentLoaded", () => {
-  const prompt = document.getElementById("prompt");
+  const promptElement = document.getElementById("prompt");
   const inputArea = document.getElementById("input-area");
-  const speedCounter = document.getElementById("speed-counter");
-  const accuracyCounter = document.getElementById("accuracy-counter");
-  const errorMessage = document.getElementById("error-message");
-  const refreshButton = document.getElementById("refresh-button");
-  const nextButton = document.getElementById("next-button");
+  const wpmDisplay = document.getElementById("wpm");
+  const accuracyDisplay = document.getElementById("accuracy-score");
+  const refreshButton = document.getElementById("refresh");
+  const nextButton = document.getElementById("next");
 
-  const prompts = [
-    "Type this sentence exactly.",
+  let prompts = [
     "The quick brown fox jumps over the lazy dog.",
-    "Coding is fun and typing helps build skill.",
-    "Hello world! This is a typing test.",
-    "I am learning to type faster and more accurately."
+    "Typing fast requires practice and focus.",
+    "Never give up on your goals, no matter what.",
+    "Consistency is the key to mastering skills.",
   ];
-
-  let currentPrompt = prompts[0];
+  let currentPrompt = "";
   let startTime = null;
-  let completed = false;
-  let correctCount = 0;
-  let incorrectCount = 0;
-  let userInput = "";
-  let typedChars = [];
+  let correctChars = 0;
+  let totalTyped = 0;
 
-  // Function to calculate WPM
-  const calculateWPM = (elapsedTime) => {
-    const totalChars = currentPrompt.length;
-    const wpm = Math.floor(((totalChars / 5) / elapsedTime)); // Simple WPM formula
-    return isNaN(wpm) || !isFinite(wpm) ? 0 : Math.max(0, wpm);
+  // Helper: Reset prompt and stats
+  const resetStats = () => {
+    startTime = null;
+    correctChars = 0;
+    totalTyped = 0;
+    wpmDisplay.textContent = "0";
+    accuracyDisplay.textContent = "100%";
   };
 
-  // Function to calculate accuracy
-  const calculateAccuracy = () => {
-    const accuracy = ((correctCount / (correctCount + incorrectCount)) * 100) || 100;
-    return accuracy.toFixed(2);
+  // Load a new prompt
+  const loadPrompt = (index) => {
+    resetStats();
+    currentPrompt = prompts[index];
+    promptElement.innerHTML = currentPrompt
+      .split("")
+      .map((char) => `<span>${char}</span>`)
+      .join("");
+    inputArea.textContent = "";
+    nextButton.disabled = true;
   };
 
-  // Function to update the prompt
-  const updatePrompt = () => {
-    completed = false;
-    correctCount = 0;
-    incorrectCount = 0;
-    userInput = ""; // Reset user input
-    typedChars = []; // Reset typed characters array
-    inputArea.disabled = false; // Enable the input area
-    inputArea.value = ""; // Clear input area
-    prompt.innerHTML = currentPrompt.split("").map(char => `<span>${char}</span>`).join(""); // Set the prompt text with spans for each character
-    errorMessage.textContent = ""; // Clear error message
-    speedCounter.textContent = "0"; // Reset WPM counter
-    accuracyCounter.textContent = "100%"; // Reset accuracy
-    startTime = null; // Reset the timer
-    nextButton.disabled = true; // Disable next button initially
-    inputArea.classList.remove("cursor-lock"); // Ensure the input field is interactive
+  // Calculate and update WPM and Accuracy
+  const updateStats = () => {
+    if (!startTime) return;
+    const elapsedTime = (new Date() - startTime) / 1000 / 60; // in minutes
+    const wpm = Math.round(correctChars / 5 / elapsedTime);
+    const accuracy = Math.round((correctChars / totalTyped) * 100) || 100;
+    wpmDisplay.textContent = isNaN(wpm) || wpm < 0 ? "0" : wpm;
+    accuracyDisplay.textContent = `${accuracy}%`;
   };
 
-  // Event listener for typing input
-  inputArea.addEventListener("input", () => {
-    if (completed) return;
-
-    userInput = inputArea.value;
+  // Event listener for typing
+  inputArea.addEventListener("input", (e) => {
+    const inputText = e.target.textContent;
+    const spans = promptElement.querySelectorAll("span");
 
     // Start timer on first keystroke
     if (!startTime) startTime = new Date();
 
-    // Check the input against the prompt character by character
-    correctCount = 0;
-    incorrectCount = 0;
-    let allCorrect = true;
+    // Reset for real-time calculations
+    correctChars = 0;
+    totalTyped = inputText.length;
 
-    const promptSpans = prompt.querySelectorAll("span");
-    for (let i = 0; i < userInput.length; i++) {
-      const inputChar = userInput[i];
-      const promptChar = currentPrompt[i];
-      const span = promptSpans[i];
-
-      if (typedChars[i]) {
-        // Skip this character if already typed correctly
-        continue;
-      }
-
-      if (inputChar === promptChar) {
+    // Validate each character
+    spans.forEach((span, i) => {
+      const typedChar = inputText[i];
+      if (typedChar == null) {
+        span.classList.remove("correct", "incorrect");
+      } else if (typedChar === span.textContent) {
         span.classList.add("correct");
         span.classList.remove("incorrect");
-        correctCount++;
-        typedChars[i] = true; // Mark this character as correctly typed
+        correctChars++;
       } else {
         span.classList.add("incorrect");
         span.classList.remove("correct");
-        incorrectCount++;
-        allCorrect = false;
       }
-    }
+    });
 
-    // Update accuracy
-    accuracyCounter.textContent = `${calculateAccuracy()}%`;
+    // Update stats
+    updateStats();
 
-    // If any mistakes are made, prevent typing further
-    if (!allCorrect) {
-      inputArea.classList.add("cursor-lock");
-      errorMessage.textContent = "Fix the mistakes before continuing.";
-    } else {
-      inputArea.classList.remove("cursor-lock");
-    }
-
-    // Check for completion (exact match)
-    if (userInput === currentPrompt) {
-      completed = true;
-      const elapsedTime = (new Date() - startTime) / 1000 / 60;
-      speedCounter.textContent = calculateWPM(elapsedTime);
-      nextButton.disabled = false; // Enable next button
+    // Check if the prompt is complete
+    if (inputText === currentPrompt) {
+      inputArea.setAttribute("contenteditable", "false");
+      nextButton.disabled = false;
     }
   });
 
-  // Event listener for the refresh button
+  // Event listeners for refresh and next buttons
   refreshButton.addEventListener("click", () => {
-    updatePrompt();
+    loadPrompt(prompts.indexOf(currentPrompt));
   });
 
-  // Event listener for the next button
   nextButton.addEventListener("click", () => {
-    const nextPromptIndex = (prompts.indexOf(currentPrompt) + 1) % prompts.length;
-    currentPrompt = prompts[nextPromptIndex];
-    updatePrompt();
+    const nextIndex = (prompts.indexOf(currentPrompt) + 1) % prompts.length;
+    loadPrompt(nextIndex);
   });
 
   // Initialize the first prompt
-  updatePrompt();
+  loadPrompt(0);
 
-  // Make sure user can click anywhere on the prompt to focus typing area
-  prompt.addEventListener("click", () => {
+  // Allow focus by clicking on prompt
+  promptElement.addEventListener("click", () => {
+    inputArea.setAttribute("contenteditable", "true");
     inputArea.focus();
   });
 });
+
 
 
 
