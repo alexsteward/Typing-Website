@@ -15,9 +15,10 @@
       <div id="prompt-container">
         <div id="prompt" class="prompt"></div>
         <div id="input-area" contenteditable="true"></div>
+        <div id="completion-message" hidden>Completed!</div>
       </div>
       <div id="stats">
-        <button id="refresh">↺</button>
+        <button id="refresh" disabled>↺</button>
         <button id="next" disabled>→</button>
         <div id="pace">WPM: <span id="wpm">0</span></div>
         <div id="accuracy">Accuracy: <span id="accuracy-score">100%</span></div>
@@ -27,5 +28,3 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
