@@ -9,7 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentPrompt = "";
   let startTime = null;
-  let totalErrors = 0;
+  let errorCount = 0; // Total mistakes made
+  let charactersTyped = 0; // Tracks total characters typed
 
   const prompts = [
     "The quick brown fox jumps over the lazy dog.",
@@ -20,15 +21,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const loadPrompt = () => {
     currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
-    promptEl.innerHTML = currentPrompt
-      .split("")
-      .map((char) => `<span>${char}</span>`)
-      .join("");
+    promptEl.innerHTML = `<span id="start-arrow">→</span>` + 
+      currentPrompt
+        .split("")
+        .map((char) => `<span>${char}</span>`)
+        .join("");
     inputArea.value = "";
     completionMessage.hidden = true;
     inputArea.disabled = false;
     startTime = null;
-    totalErrors = 0;
+    errorCount = 0;
+    charactersTyped = 0;
     updateStats(0, 100);
   };
 
@@ -37,9 +40,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(0, Math.floor(wordsTyped / elapsedTime));
   };
 
-  const calculateAccuracy = (totalTyped) => {
-    const correctTyped = totalTyped - totalErrors;
-    return Math.max(0, Math.floor((correctTyped / totalTyped) * 100));
+  const calculateAccuracy = () => {
+    const correctChars = charactersTyped - errorCount;
+    return Math.max(0, Math.floor((correctChars / charactersTyped) * 100));
   };
 
   const updateStats = (wpm, accuracy) => {
@@ -52,7 +55,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const userInput = inputArea.value;
     const spans = promptEl.querySelectorAll("span");
-    let errors = 0;
+    let localErrors = 0;
 
     spans.forEach((span, index) => {
       const char = userInput[index];
@@ -65,19 +68,20 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         span.classList.add("incorrect");
         span.classList.remove("correct");
-        errors++;
+        localErrors++;
       }
     });
 
-    totalErrors = errors;
+    errorCount += localErrors;
+    charactersTyped = userInput.length;
 
     const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
     const wpm = calculateWPM(elapsedTime);
-    const accuracy = calculateAccuracy(userInput.length);
+    const accuracy = calculateAccuracy();
 
     updateStats(wpm, accuracy);
 
-    if (userInput === currentPrompt) {
+    if (userInput.length === currentPrompt.length) {
       completionMessage.hidden = false;
       inputArea.disabled = true;
     }
@@ -88,6 +92,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadPrompt();
 });
+
 
 
 
