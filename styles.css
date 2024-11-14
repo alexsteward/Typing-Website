@@ -1,118 +1,105 @@
-/* General Reset */
 body, html {
   margin: 0;
   padding: 0;
-  font-family: 'Arial', sans-serif;
+  font-family: Arial, sans-serif;
   background-color: #0f111a;
   color: #c5c6c7;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  overflow: hidden;
 }
 
 #app {
-  width: 80%;
-  max-width: 900px;
   text-align: center;
+  width: 90%;
+  max-width: 800px;
 }
 
-/* Header Logo */
-header h1#logo {
+header h1 {
   font-size: 24px;
-  font-weight: bold;
   color: #ffcc00;
   margin-bottom: 20px;
 }
 
-/* Navigation Menu */
-nav {
+#prompt-container {
   display: flex;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.menu-item {
-  color: #c5c6c7;
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.menu-item.active {
-  color: #ffcc00;
-  text-decoration: underline;
-}
-
-/* Typing Area */
-main #typing-area {
-  display: flex;
-  justify-content: center;
   align-items: center;
-  background-color: #16191f;
-  padding: 20px;
+  margin-bottom: 20px;
+}
+
+#start-arrow {
+  font-size: 20px;
+  color: #ffcc00;
+  margin-right: 5px;
+}
+
+.prompt {
+  font-size: 20px;
   border-radius: 8px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-  margin-bottom: 10px;
-  min-height: 50px;
-  overflow-x: auto;
+  background-color: #16191f;
+  color: rgba(255, 255, 255, 0.7);
+  padding: 10px;
+  display: inline-block;
+  white-space: nowrap; /* Keep text in a single line */
 }
 
-#typing-area #prompt {
-  font-size: 22px;
-  color: rgba(197, 198, 199, 0.4);
-  white-space: nowrap;
+.prompt span {
+  opacity: 0.4;
+  color: #c5c6c7;
 }
 
-#typing-area #prompt span.correct {
+.prompt span.correct {
+  opacity: 1;
   color: #ffffff;
 }
 
-#typing-area #prompt span.incorrect {
+.prompt span.incorrect {
+  opacity: 1;
   color: #ff0000;
 }
 
-/* Typing Box */
-#input-area {
-  width: 100%;
-  height: 40px;
-  background-color: transparent;
-  color: #c5c6c7;
+#completion-message {
   font-size: 18px;
-  border: 1px solid #72767d;
-  border-radius: 4px;
-  padding: 5px;
-  outline: none;
-}
-
-/* Stats */
-#stats {
+  color: #00ff00;
   margin-top: 10px;
+}
+
+#stats {
   display: flex;
-  justify-content: space-between;
-  color: #ffcc00;
+  justify-content: space-around;
+  margin-top: 10px;
   font-size: 16px;
 }
 
-/* Controls */
-#controls {
-  margin-top: 20px;
-}
-
-#controls button {
-  padding: 8px 15px;
-  font-size: 16px;
+button {
+  font-size: 18px;
+  padding: 5px 10px;
   margin: 0 5px;
-  color: #ffffff;
   background-color: #ffcc00;
   border: none;
   border-radius: 4px;
   cursor: pointer;
 }
 
-#controls button:hover {
-  background-color: #e6b800;
+button:hover {
+  background-color: #ffe066;
+}
+
+#input-area {
+  width: 100%;
+  font-size: 18px;
+  padding: 10px;
+  margin-top: 20px;
+  border: 1px solid #c5c6c7;
+  border-radius: 4px;
+  background-color: #16191f;
+  color: white;
+}
+
+#input-area:disabled {
+  background-color: #272b36;
+  color: #a1a1a1;
 }
 
 
