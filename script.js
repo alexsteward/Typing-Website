@@ -7,20 +7,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const wpmEl = document.getElementById("wpm");
   const accuracyEl = document.getElementById("accuracy-value");
 
+  const regularModeButton = document.getElementById("regular-mode");
+  const punctuationModeButton = document.getElementById("punctuation-mode");
+
   let currentPrompt = "";
   let startTime = null;
   let errorIndices = new Set(); // Tracks indices of errors for accuracy
   let charactersTyped = 0;
 
-  const prompts = [
-    "The quick brown fox jumps over the lazy dog.",
-    "Typing is fun and improves your speed.",
-    "Accuracy and consistency are key.",
-    "Test your skills with this challenge."
+  // Regular and punctuation prompts
+  const regularPrompts = [
+    "the quick brown fox jumps over the lazy dog",
+    "typing is fun and improves your speed",
+    "accuracy and consistency are key",
+    "test your skills with this challenge"
   ];
+
+  const punctuationPrompts = [
+    "Hello, world! How are you today?",
+    "This is a test: Are you ready?",
+    "Let's go! Finish this quickly.",
+    "The rain is heavy, but we can still go."
+  ];
+
+  let currentMode = "regular"; // Default mode is regular
 
   // Load a new prompt
   const loadPrompt = () => {
+    // Select the prompts based on the mode
+    const prompts = currentMode === "regular" ? regularPrompts : punctuationPrompts;
     currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
     promptEl.innerHTML = currentPrompt
       .split("")
@@ -98,6 +113,17 @@ document.addEventListener("DOMContentLoaded", () => {
   // Button event listeners
   refreshButton.addEventListener("click", loadPrompt);
   nextButton.addEventListener("click", loadPrompt);
+
+  // Mode selection
+  regularModeButton.addEventListener("click", () => {
+    currentMode = "regular";
+    loadPrompt(); // Reload prompt with new mode
+  });
+
+  punctuationModeButton.addEventListener("click", () => {
+    currentMode = "punctuation";
+    loadPrompt(); // Reload prompt with new mode
+  });
 
   // Initialize
   loadPrompt();
