@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let startTime = null;
   let completed = false;
   let correctCount = 0;
+  let userInput = "";
 
   // Function to calculate WPM
   const calculateWPM = (elapsedTime) => {
@@ -37,6 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const updatePrompt = () => {
     completed = false;
     correctCount = 0;
+    userInput = ""; // Reset user input
     inputArea.disabled = false; // Enable the input area
     inputArea.value = ""; // Clear input area
     prompt.textContent = currentPrompt; // Set the prompt text
@@ -45,27 +47,41 @@ document.addEventListener("DOMContentLoaded", () => {
     accuracyCounter.textContent = "100%"; // Reset accuracy
     startTime = null; // Reset the timer
     nextButton.disabled = true; // Disable next button initially
+    inputArea.classList.remove("cursor-lock"); // Ensure the input field is interactive
   };
 
   // Event listener for typing input
   inputArea.addEventListener("input", () => {
     if (completed) return;
 
-    const userInput = inputArea.value;
+    userInput = inputArea.value;
 
     // Start timer on first keystroke
     if (!startTime) startTime = new Date();
 
-    // Calculate correct characters count
+    // Check the input against the prompt character by character
     correctCount = 0;
+    let allCorrect = true;
     for (let i = 0; i < userInput.length; i++) {
-      if (userInput[i] === currentPrompt[i]) {
+      const inputChar = userInput[i];
+      const promptChar = currentPrompt[i];
+      if (inputChar === promptChar) {
         correctCount++;
+      } else {
+        allCorrect = false;
       }
     }
 
     // Update accuracy
     accuracyCounter.textContent = `${calculateAccuracy()}%`;
+
+    // If any mistakes are made, prevent typing further
+    if (!allCorrect) {
+      inputArea.classList.add("cursor-lock");
+      errorMessage.textContent = "Fix the mistakes before continuing.";
+    } else {
+      inputArea.classList.remove("cursor-lock");
+    }
 
     // Check for completion (exact match)
     if (userInput === currentPrompt) {
@@ -106,4 +122,5 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize the first prompt
   updatePrompt();
 });
+
 
