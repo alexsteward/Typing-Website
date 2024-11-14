@@ -9,91 +9,106 @@ body, html {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  overflow: hidden;
 }
 
 #app {
   width: 80%;
-  max-width: 600px;
+  max-width: 900px;
   text-align: center;
 }
 
-/* Typing Area */
-#prompt-area {
+/* Header Logo */
+header h1#logo {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffcc00;
   margin-bottom: 20px;
 }
 
+/* Typing Area */
+main #typing-area {
+  background-color: #16191f;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
 #prompt {
-  font-size: 18px;
-  color: #ffffff;
+  font-size: 22px;
+  margin-bottom: 20px;
   line-height: 1.5;
+  text-align: left;
+  position: relative;
+  white-space: pre-wrap; /* Maintain spaces and newlines */
+}
+
+#prompt span {
+  opacity: 0.4;
+  color: #c5c6c7;
+  transition: opacity 0.2s;
+}
+
+#prompt span.correct {
+  opacity: 1;
+  color: #ffffff;
+}
+
+#prompt span.incorrect {
+  opacity: 1;
+  color: #ff0000;
 }
 
 #input-area {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
-  height: 100px;
-  background-color: #16191f;
-  color: #ffffff;
-  font-size: 18px;
-  padding: 10px;
+  height: 100%;
+  background-color: transparent;
+  color: transparent; /* Make text invisible */
+  font-size: 22px;
+  line-height: 1.5;
   border: none;
   outline: none;
-  border-radius: 8px;
+  white-space: pre-wrap; /* Keep spaces and newlines aligned */
+  cursor: text;
+  z-index: 2;
 }
 
-#speed-info {
-  margin-top: 20px;
-  font-size: 16px;
-  color: #ffcc00;
+#input-area::selection {
+  background: none; /* Disable text highlighting for a seamless overlay */
 }
 
 #error-message {
   color: #ff0000;
-  font-size: 14px;
+  font-size: 12px;
   margin-top: 5px;
 }
 
-/* Control Buttons */
-#controls {
+footer {
   margin-top: 20px;
   display: flex;
-  justify-content: center;
-  gap: 20px;
+  justify-content: space-between;
+  color: #72767d;
+  font-size: 14px;
 }
 
-.control-button {
-  font-size: 20px;
-  padding: 10px;
+button {
   background-color: #ffcc00;
+  color: #16191f;
   border: none;
+  padding: 10px;
+  font-size: 16px;
   cursor: pointer;
-  border-radius: 8px;
 }
 
-.control-button:hover {
-  background-color: #ff9900;
-}
-
-.control-button:disabled {
-  background-color: #777;
+button:disabled {
+  opacity: 0.5;
   cursor: not-allowed;
 }
 
-/* Error Highlight */
-#input-area:invalid {
-  border: 2px solid red;
-}
-
-.correct {
-  color: green;
-}
-
-.incorrect {
-  color: red;
-}
-
-.cursor-lock {
-  pointer-events: none;
-}
 
 
 
