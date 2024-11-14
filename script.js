@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", () => {
     userInput = ""; // Reset user input
     inputArea.disabled = false; // Enable the input area
     inputArea.value = ""; // Clear input area
-    prompt.textContent = currentPrompt; // Set the prompt text
+    prompt.innerHTML = currentPrompt.split("").map(char => `<span>${char}</span>`).join(""); // Set the prompt text with spans for each character
     errorMessage.textContent = ""; // Clear error message
     speedCounter.textContent = "0"; // Reset WPM counter
     accuracyCounter.textContent = "100%"; // Reset accuracy
@@ -65,12 +65,20 @@ document.addEventListener("DOMContentLoaded", () => {
     correctCount = 0;
     incorrectCount = 0;
     let allCorrect = true;
+
+    const promptSpans = prompt.querySelectorAll("span");
     for (let i = 0; i < userInput.length; i++) {
       const inputChar = userInput[i];
       const promptChar = currentPrompt[i];
+      const span = promptSpans[i];
+
       if (inputChar === promptChar) {
+        span.classList.add("correct");
+        span.classList.remove("incorrect");
         correctCount++;
       } else {
+        span.classList.add("incorrect");
+        span.classList.remove("correct");
         incorrectCount++;
         allCorrect = false;
       }
@@ -126,6 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Initialize the first prompt
   updatePrompt();
 });
+
 
 
 
