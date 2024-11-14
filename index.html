@@ -3,43 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Typing Practice</title>
+  <title>Typing Test</title>
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <div id="app">
-    <!-- Header -->
     <header>
-      <h1 id="logo">Typing Practice</h1>
+      <h1>Typing Test</h1>
     </header>
-
-    <!-- Typing Categories -->
-    <nav>
-      <span id="punctuation" class="menu-item active">Punctuation</span>
-      <span id="regular" class="menu-item">Regular</span>
-      <span id="numbers" class="menu-item">Numbers</span>
-    </nav>
-
-    <!-- Typing Area -->
     <main>
-      <div id="typing-area">
-        <div id="prompt"></div>
+      <div id="prompt-container">
+        <div id="start-arrow">→</div> <!-- Aesthetic arrow -->
+        <div id="prompt" class="prompt"></div> <!-- The actual prompt text -->
+        <div id="completion-message" hidden>Completed!</div>
+      </div>
+      <div id="stats">
+        <button id="refresh" title="Restart current prompt">↺</button>
+        <button id="next" title="Move to next prompt">→</button>
+        <div id="pace">WPM: <span id="wpm">0</span></div>
+        <div id="accuracy">Accuracy: <span id="accuracy-value">100%</span></div>
       </div>
       <textarea id="input-area" autofocus></textarea>
-      <div id="stats">
-        <span>Speed: <span id="speed-counter">0</span> WPM</span>
-        <span>Accuracy: <span id="accuracy-counter">100</span>%</span>
-      </div>
-      <div id="controls">
-        <button id="refresh-button">↺ Refresh</button>
-        <button id="next-button">→ Next</button>
-      </div>
     </main>
   </div>
-
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
