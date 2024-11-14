@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const refreshButton = document.getElementById("refresh");
   const nextButton = document.getElementById("next");
   const completionMessage = document.getElementById("completion-message");
+  const startButton = document.getElementById("start-button");
 
   let prompts = [
     "The quick brown fox jumps over the lazy dog.",
@@ -29,6 +30,7 @@ document.addEventListener("DOMContentLoaded", () => {
     inputArea.textContent = "";
     inputArea.setAttribute("contenteditable", "false");
     isTyping = false;
+    startButton.disabled = false;
   };
 
   const loadPrompt = (index) => {
@@ -83,6 +85,13 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 
+  startButton.addEventListener("click", () => {
+    inputArea.setAttribute("contenteditable", "true");
+    inputArea.focus();
+    isTyping = true;
+    startButton.disabled = true;
+  });
+
   refreshButton.addEventListener("click", () => {
     loadPrompt(prompts.indexOf(currentPrompt));
   });
@@ -90,14 +99,6 @@ document.addEventListener("DOMContentLoaded", () => {
   nextButton.addEventListener("click", () => {
     const nextIndex = (prompts.indexOf(currentPrompt) + 1) % prompts.length;
     loadPrompt(nextIndex);
-  });
-
-  promptElement.addEventListener("click", () => {
-    if (!isTyping) {
-      inputArea.setAttribute("contenteditable", "true");
-      inputArea.focus();
-      isTyping = true;
-    }
   });
 
   loadPrompt(0);
