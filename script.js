@@ -9,8 +9,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let currentPrompt = "";
   let startTime = null;
-  let errorCount = 0; // Total mistakes made
-  let charactersTyped = 0; // Tracks total characters typed
+  let errorIndices = new Set(); // Tracks indices of errors for accuracy
+  let charactersTyped = 0;
 
   const prompts = [
     "The quick brown fox jumps over the lazy dog.",
@@ -19,6 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "Test your skills with this challenge."
   ];
 
+  // Load a new prompt
   const loadPrompt = () => {
     currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
     promptEl.innerHTML = currentPrompt
@@ -29,32 +30,39 @@ document.addEventListener("DOMContentLoaded", () => {
     completionMessage.hidden = true;
     inputArea.disabled = false;
     startTime = null;
-    errorCount = 0;
+    errorIndices.clear();
     charactersTyped = 0;
     updateStats(0, 100);
   };
 
+  // Calculate Words Per Minute (WPM)
   const calculateWPM = (elapsedTime) => {
     const wordsTyped = currentPrompt.length / 5;
     return Math.max(0, Math.floor(wordsTyped / elapsedTime));
   };
 
+  // Calculate Accuracy
   const calculateAccuracy = () => {
-    const correctChars = charactersTyped - errorCount;
-    return Math.max(0, Math.floor((correctChars / charactersTyped) * 100));
+    const totalChars = currentPrompt.length;
+    const incorrectChars = errorIndices.size;
+    const correctChars = totalChars - incorrectChars;
+    return Math.max(0, Math.floor((correctChars / totalChars) * 100));
   };
 
+  // Update WPM and Accuracy
   const updateStats = (wpm, accuracy) => {
     wpmEl.textContent = wpm;
     accuracyEl.textContent = `${accuracy}%`;
   };
 
+  // Input event listener
   inputArea.addEventListener("input", () => {
     if (!startTime) startTime = new Date();
 
     const userInput = inputArea.value;
     const spans = promptEl.querySelectorAll("span");
-    let localErrors = 0;
+
+    errorIndices.clear(); // Reset error tracking for this evaluation
 
     spans.forEach((span, index) => {
       const char = userInput[index];
@@ -67,30 +75,34 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         span.classList.add("incorrect");
         span.classList.remove("correct");
-        localErrors++;
+        errorIndices.add(index); // Mark this index as an error
       }
     });
 
-    errorCount += localErrors;
     charactersTyped = userInput.length;
 
+    // Calculate WPM and accuracy
     const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
     const wpm = calculateWPM(elapsedTime);
     const accuracy = calculateAccuracy();
 
     updateStats(wpm, accuracy);
 
+    // Check if the prompt is fully typed
     if (userInput.length === currentPrompt.length) {
       completionMessage.hidden = false;
-      inputArea.disabled = true;
+      inputArea.disabled = true; // Disable input after completion
     }
   });
 
+  // Button event listeners
   refreshButton.addEventListener("click", loadPrompt);
   nextButton.addEventListener("click", loadPrompt);
 
+  // Initialize
   loadPrompt();
 });
+
 
 
 
