@@ -114,38 +114,6 @@ footer {
   font-size: 14px;
 }
 
-/* Leaderboard */
-#leaderboard {
-  margin-top: 30px;
-  text-align: center;
-}
-
-#leaderboard h2 {
-  font-size: 18px;
-  color: #ffcc00;
-}
-
-#leaderboard ul {
-  list-style: none;
-  padding: 0;
-  color: #ffffff;
-}
-
-#leaderboard form {
-  margin-top: 10px;
-}
-
-#leaderboard input,
-#leaderboard button {
-  padding: 5px;
-  font-size: 14px;
-}
-
-#leaderboard button {
-  background-color: #ffcc00;
-  border: none;
-  cursor: pointer;
-}
 
 
 
