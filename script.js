@@ -3,8 +3,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const inputArea = document.getElementById("input-area");
   const speedCounter = document.getElementById("speed-counter");
   const errorMessage = document.getElementById("error-message");
+  const refreshButton = document.getElementById("refresh-button");
+  const nextButton = document.getElementById("next-button");
 
-  let currentPrompt = "Type this sentence exactly.";
+  const prompts = [
+    "Type this sentence exactly.",
+    "The quick brown fox jumps over the lazy dog.",
+    "Coding is fun and typing helps build skill.",
+    "Hello world! This is a typing test.",
+    "I am learning to type faster and more accurately."
+  ];
+
+  let currentPrompt = prompts[0];
   let startTime = null;
   let completed = false;
 
@@ -15,12 +25,22 @@ document.addEventListener("DOMContentLoaded", () => {
     return isNaN(wpm) || !isFinite(wpm) ? 0 : Math.max(0, wpm);
   };
 
+  // Function to update the prompt
+  const updatePrompt = () => {
+    completed = false;
+    inputArea.disabled = false; // Enable the input area
+    inputArea.value = ""; // Clear input area
+    prompt.textContent = currentPrompt; // Set the prompt text
+    errorMessage.textContent = ""; // Clear error message
+    startTime = null; // Reset the timer
+    speedCounter.textContent = "0"; // Reset WPM counter
+  };
+
   // Event listener for typing input
   inputArea.addEventListener("input", () => {
     if (completed) return;
 
     const userInput = inputArea.value;
-    const promptChars = currentPrompt.split("");
 
     // Start timer on first keystroke
     if (!startTime) startTime = new Date();
@@ -45,4 +65,21 @@ document.addEventListener("DOMContentLoaded", () => {
   const showCompletionMessage = (wpm) => {
     errorMessage.textContent = `Completed! Your typing speed: ${wpm} WPM`;
   };
+
+  // Refresh button event listener
+  refreshButton.addEventListener("click", () => {
+    updatePrompt();
+  });
+
+  // Next button event listener
+  nextButton.addEventListener("click", () => {
+    // Move to the next prompt
+    const currentIndex = prompts.indexOf(currentPrompt);
+    const nextIndex = (currentIndex + 1) % prompts.length; // Loop back to the start if at the end
+    currentPrompt = prompts[nextIndex];
+    updatePrompt();
+  });
+
+  // Initialize the first prompt
+  updatePrompt();
 });
