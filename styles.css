@@ -24,11 +24,13 @@ header h1 {
 
 #mode-selection {
   display: flex;
-  justify-content: space-between; /* Distribute buttons to the edges */
-  align-items: center; /* Vertically align items in the container */
-  margin-bottom: 100px;
-  padding: 0 20px; /* Optional: Add padding to keep buttons from touching container edges */
+  justify-content: space-between; /* Buttons spaced across the container */
+  align-items: center;
+  margin-bottom: 20px; /* Ensure there's some space below the mode buttons */
+  padding: 0 20px; /* Padding to keep buttons from touching edges */
+  margin-top: 30px; /* Add a top margin to create space between the buttons and the prompt */
 }
+
 
 #mode-selection button {
   font-size: 14px;
