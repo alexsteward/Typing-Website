@@ -19,7 +19,6 @@
       <div id="prompt-container">
         <div id="start-arrow">→</div> <!-- Aesthetic arrow -->
         <div id="prompt" class="prompt"></div> <!-- The actual prompt text -->
-        <div id="completion-message" hidden>Completed!</div>
       </div>
       <div id="stats">
         <button id="refresh" title="Restart current prompt">↺</button>
@@ -29,10 +28,20 @@
       </div>
       <textarea id="input-area" autofocus></textarea>
     </main>
+    <!-- Pop-up for Completion -->
+    <div id="completion-popup" hidden>
+      <div id="popup-content">
+        <button id="close-popup" title="Close">×</button>
+        <h2>Completed!</h2>
+        <p>WPM: <span id="popup-wpm">0</span></p>
+        <p>Accuracy: <span id="popup-accuracy">100%</span></p>
+      </div>
+    </div>
   </div>
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
