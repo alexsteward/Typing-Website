@@ -77,41 +77,43 @@ document.addEventListener("DOMContentLoaded", () => {
   const userInput = inputArea.value;
   const spans = promptEl.querySelectorAll("span");
 
+  const previouslyIncorrect = new Set([...errorIndices]); // Keep track of previously recorded errors
   errorIndices.clear(); // Reset error tracking for this evaluation
 
   spans.forEach((span, index) => {
     const char = userInput[index];
 
     if (char == null) {
-      // Reset styling for characters not yet typed
       span.classList.remove("correct", "incorrect");
     } else if (char === span.textContent) {
-      // Mark correctly typed characters
       span.classList.add("correct");
       span.classList.remove("incorrect");
     } else {
-      // Mark incorrectly typed characters
       span.classList.add("incorrect");
       span.classList.remove("correct");
-      errorIndices.add(index); // Record this index as an error
+      errorIndices.add(index);
     }
   });
 
+  // Ensure all previous errors remain counted for accuracy deduction
+  previouslyIncorrect.forEach((index) => errorIndices.add(index));
+
   charactersTyped = userInput.length;
 
-  // Recalculate stats
+  // Calculate stats dynamically
   const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
   const wpm = calculateWPM(elapsedTime);
   const accuracy = calculateAccuracy();
 
   updateStats(wpm, accuracy);
 
-  // Check if the prompt is fully typed
+  // Prompt completion
   if (userInput.length === currentPrompt.length) {
     completionMessage.hidden = false;
     inputArea.disabled = true; // Disable input after completion
   }
 });
+
 
   // Button event listeners
   refreshButton.addEventListener("click", loadPrompt);
