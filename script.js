@@ -7,39 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const accuracyEl = document.getElementById("accuracy-value");
   const regularModeButton = document.getElementById("regular-mode");
   const punctuationModeButton = document.getElementById("punctuation-mode");
-
-  const popup = document.createElement("div");
-  popup.id = "completion-popup";
-  popup.innerHTML = `
-    <div id="popup-content">
-      <button id="close-popup">&times;</button>
-      <h2>Completed!</h2>
-      <p id="popup-wpm">WPM: 0</p>
-      <p id="popup-accuracy">Accuracy: 100%</p>
-    </div>
-  `;
-  document.body.appendChild(popup);
-
-  const closePopupButton = document.getElementById("close-popup");
-
-  // Show the popup with stats from the main area
-  const showCompletionPopup = () => {
-    // Use wpmEl and accuracyEl to get current values
-    const wpm = wpmEl.textContent;
-    const accuracy = accuracyEl.textContent;
-
-    // Update the popup with WPM and accuracy values
-    document.getElementById("popup-wpm").textContent = `WPM: ${wpm}`;
-    document.getElementById("popup-accuracy").textContent = `Accuracy: ${accuracy}`;
-
-    // Show the popup
-    popup.style.display = "block";
-  };
-
-  // Close popup handler
-  closePopupButton.addEventListener("click", () => {
-    popup.style.display = "none"; // Hide the popup
-  });
+  const completionMessageEl = document.getElementById("completion-message"); // Completion message element
 
   let currentPrompt = "";
   let startTime = null;
@@ -76,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     charactersTyped = 0;
     startTime = null;
     updateStats(0, 100);
+    completionMessageEl.hidden = true; // Hide the completion message when a new prompt is loaded
   };
 
   // Calculate Words Per Minute (WPM)
@@ -93,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(0, Math.floor((correctChars / totalChars) * 100));
   };
 
-  // Update WPM and Accuracy in the main UI
+  // Update WPM and Accuracy
   const updateStats = (wpm, accuracy) => {
     wpmEl.textContent = wpm;
     accuracyEl.textContent = `${accuracy}%`;
@@ -138,7 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Prompt completion
     if (userInput.length === currentPrompt.length) {
-      showCompletionPopup();  // Show completion popup with values from stats
+      completionMessageEl.hidden = false; // Show the completion message
       inputArea.disabled = true; // Disable input after completion
     }
   });
@@ -155,6 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
       span.classList.remove("correct", "incorrect"); 
     });
     startTime = null;
+    completionMessageEl.hidden = true; // Hide the completion message when refreshing
   });
 
   nextButton.addEventListener("click", loadPrompt);
