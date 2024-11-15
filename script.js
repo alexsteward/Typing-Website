@@ -116,17 +116,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // Button event listeners
-  refreshButton.addEventListener("click", () => {
-  inputArea.value = ""; 
-  errorIndices.clear();  
-  charactersTyped = 0;  
-  completionMessage.hidden = true;  
-  inputArea.disabled = false;  
-  updateStats(0, 100);  
+refreshButton.addEventListener("click", () => {
+  inputArea.value = "";
+  errorIndices.clear();
+  charactersTyped = 0;
+  completionMessage.hidden = true;
+  inputArea.disabled = false;
+  updateStats(0, 100);
   const spans = promptEl.querySelectorAll("span");
   spans.forEach(span => {
-    span.classList.remove("correct", "incorrect");
+    span.classList.remove("correct", "incorrect"); 
   });
+  startTime = null;
 });
 
 nextButton.addEventListener("click", loadPrompt);
