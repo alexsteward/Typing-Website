@@ -116,7 +116,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
   // Button event listeners
-  refreshButton.addEventListener("click", loadPrompt);
+  refreshButton.addEventListener("click", () => {
+    loadPrompt();  
+  });
+  
   nextButton.addEventListener("click", loadPrompt);
 
   // Mode selection
