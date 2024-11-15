@@ -1,24 +1,19 @@
 document.addEventListener("DOMContentLoaded", () => {
   const promptEl = document.getElementById("prompt");
   const inputArea = document.getElementById("input-area");
-  const completionMessage = document.getElementById("completion-message");
   const refreshButton = document.getElementById("refresh");
   const nextButton = document.getElementById("next");
   const wpmEl = document.getElementById("wpm");
   const accuracyEl = document.getElementById("accuracy-value");
   const regularModeButton = document.getElementById("regular-mode");
   const punctuationModeButton = document.getElementById("punctuation-mode");
-  const submitButton = document.getElementById("submit-score"); // Button for submitting score
-  const leaderboardEl = document.getElementById("leaderboard"); // To display leaderboard
+  const completionMessageEl = document.getElementById("completion-message"); // Completion message element
 
   let currentPrompt = "";
   let startTime = null;
   let errorIndices = new Set();
-  let allErrors = 0;
   let charactersTyped = 0;
   let currentMode = "regular";
-  let currentWpm = 0;
-  let currentAccuracy = 100;
 
   const prompts = {
     regular: [
@@ -35,32 +30,31 @@ document.addEventListener("DOMContentLoaded", () => {
     ],
   };
 
-  // Load leaderboard from localStorage
-  let leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
-
+  // Load a new prompt
   const loadPrompt = () => {
     currentPrompt =
       prompts[currentMode][Math.floor(Math.random() * prompts[currentMode].length)];
     promptEl.innerHTML = currentPrompt
-      .split(" ")
+      .split("")
       .map((char) => `<span>${char}</span>`)
-      .join(" ");
+      .join("");
     inputArea.value = "";
-    completionMessage.hidden = true;
     inputArea.disabled = false;
-    startTime = null;
     errorIndices.clear();
-    allErrors = 0;
     charactersTyped = 0;
+    startTime = null;
     updateStats(0, 100);
+    completionMessageEl.hidden = true; // Hide the completion message when a new prompt is loaded
   };
 
+  // Calculate Words Per Minute (WPM)
   const calculateWPM = (elapsedTime) => {
     const correctChars = currentPrompt.length - errorIndices.size;
     const wordsTyped = correctChars / 5; // Assume 5 characters per word
     return Math.max(0, Math.floor(wordsTyped / elapsedTime));
   };
 
+  // Calculate Accuracy
   const calculateAccuracy = () => {
     const totalChars = currentPrompt.length;
     const incorrectChars = errorIndices.size;
@@ -68,21 +62,10 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(0, Math.floor((correctChars / totalChars) * 100));
   };
 
+  // Update WPM and Accuracy
   const updateStats = (wpm, accuracy) => {
     wpmEl.textContent = wpm;
     accuracyEl.textContent = `${accuracy}%`;
-  };
-
-  const updateLeaderboard = () => {
-    leaderboardEl.innerHTML = leaderboard
-      .sort((a, b) => b.wpm - a.wpm) // Sort leaderboard by WPM in descending order
-      .slice(0, 10) // Get top 10 scores
-      .map(
-        (entry, index) => `
-        <li>${index + 1}. ${entry.wpm} WPM - ${entry.accuracy}% Accuracy</li>
-      `
-      )
-      .join("");
   };
 
   // Handle input events
@@ -92,11 +75,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const userInput = inputArea.value;
     const spans = promptEl.querySelectorAll("span");
 
-    const previouslyIncorrect = new Set([...errorIndices]);
-    errorIndices.clear();
+    const previouslyIncorrect = new Set([...errorIndices]); // Keep track of previously recorded errors
+    errorIndices.clear(); // Reset error tracking for this evaluation
 
     spans.forEach((span, index) => {
       const char = userInput[index];
+
       if (char == null) {
         span.classList.remove("correct", "incorrect");
       } else if (char === span.textContent) {
@@ -109,29 +93,22 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
+    // Ensure all previous errors remain counted for accuracy deduction
     previouslyIncorrect.forEach((index) => errorIndices.add(index));
+
     charactersTyped = userInput.length;
 
+    // Calculate stats dynamically
     const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
-    currentWpm = calculateWPM(elapsedTime);
-    currentAccuracy = calculateAccuracy();
+    const wpm = calculateWPM(elapsedTime);
+    const accuracy = calculateAccuracy();
 
-    updateStats(currentWpm, currentAccuracy);
+    updateStats(wpm, accuracy);
 
+    // Prompt completion
     if (userInput.length === currentPrompt.length) {
-      completionMessage.hidden = false;
-      inputArea.disabled = true;
-    }
-  });
-
-  // Handle score submission
-  submitButton.addEventListener("click", () => {
-    if (currentWpm > 0 && currentAccuracy >= 0) {
-      const newEntry = { wpm: currentWpm, accuracy: currentAccuracy };
-      leaderboard.push(newEntry);
-      leaderboard = leaderboard.sort((a, b) => b.wpm - a.wpm).slice(0, 10); // Keep top 10
-      localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
-      updateLeaderboard();
+      completionMessageEl.hidden = false; // Show the completion message
+      inputArea.disabled = true; // Disable input after completion
     }
   });
 
@@ -140,14 +117,14 @@ document.addEventListener("DOMContentLoaded", () => {
     inputArea.value = "";
     errorIndices.clear();
     charactersTyped = 0;
-    completionMessage.hidden = true;
     inputArea.disabled = false;
     updateStats(0, 100);
     const spans = promptEl.querySelectorAll("span");
     spans.forEach(span => {
-      span.classList.remove("correct", "incorrect");
+      span.classList.remove("correct", "incorrect"); 
     });
     startTime = null;
+    completionMessageEl.hidden = true; // Hide the completion message when refreshing
   });
 
   nextButton.addEventListener("click", loadPrompt);
@@ -169,8 +146,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initialize
   loadPrompt();
-  updateLeaderboard();
 });
+
 
 
 
