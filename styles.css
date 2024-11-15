@@ -22,23 +22,27 @@ header h1 {
   margin-bottom: 20px;
 }
 
-#mode-selector {
-  margin-bottom: 10px;
+#mode-selection {
+  display: flex;
+  justify-content: center;
+  gap: 20px; 
+  margin-bottom: 20px;
 }
 
-.mode-button {
+#mode-selection button {
   font-size: 14px;
-  padding: 5px 10px;
-  margin: 0 10px;
-  background-color: #ffcc00;
-  border: none;
+  padding: 8px 16px;
+  background-color: #16191f;
+  color: #ffffff;
+  border: 1px solid #c5c6c7;
   border-radius: 4px;
   cursor: pointer;
 }
 
-.mode-button:hover {
-  background-color: #ffe066;
+#mode-selection button:hover {
+  background-color: #272b36;
 }
+
 
 #prompt-container {
   display: flex;
