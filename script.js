@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Calculate Words Per Minute (WPM)
   const calculateWPM = (elapsedTime) => {
   const correctChars = currentPrompt.length - errorIndices.size;
-  const wordsTyped = correctChars / 5; // Average word length is 5 characters
+  const wordsTyped = correctChars / 5; // Assume 5 characters per word
   return Math.max(0, Math.floor(wordsTyped / elapsedTime));
 };
 
