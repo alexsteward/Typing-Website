@@ -26,7 +26,7 @@ header h1 {
   display: flex;
   justify-content: space-between; /* Distribute buttons to the edges */
   align-items: center; /* Vertically align items in the container */
-  margin-bottom: 20px;
+  margin-bottom: 40px;
   padding: 0 20px; /* Optional: Add padding to keep buttons from touching container edges */
 }
 
@@ -49,7 +49,7 @@ header h1 {
 #prompt-container {
   display: flex;
   align-items: center;
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 #start-arrow {
