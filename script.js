@@ -123,6 +123,10 @@ document.addEventListener("DOMContentLoaded", () => {
   completionMessage.hidden = true;  
   inputArea.disabled = false;  
   updateStats(0, 100);  
+  const spans = promptEl.querySelectorAll("span");
+  spans.forEach(span => {
+    span.classList.remove("correct", "incorrect");
+  });
 });
 
 nextButton.addEventListener("click", loadPrompt);
