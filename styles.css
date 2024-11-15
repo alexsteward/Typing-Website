@@ -27,7 +27,7 @@ header h1 {
   justify-content: space-evenly; /* Buttons evenly spaced */
   align-items: center;
   width: 100%;
-  margin-bottom: 100px; /* Increased space between the buttons and the prompt */
+  margin-bottom: 40px; /* Added consistent spacing below buttons */
   padding: 0 20px; /* Padding to keep buttons from touching the edges */
 }
 
@@ -50,7 +50,8 @@ header h1 {
   display: flex;
   align-items: center;
   justify-content: center; /* Center the prompt horizontally */
-  margin-bottom: 30px;
+  margin-bottom: 20px; /* Adjusted spacing between prompt and input area */
+  margin-top: 40px; /* Added spacing between modes and prompt */
 }
 
 .prompt {
@@ -120,6 +121,7 @@ button:hover {
   background-color: #272b36;
   color: #a1a1a1;
 }
+
 
 
 
