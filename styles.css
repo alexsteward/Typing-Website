@@ -24,9 +24,10 @@ header h1 {
 
 #mode-selection {
   display: flex;
-  justify-content: center;
-  gap: 20px; 
+  justify-content: space-between; /* Distribute buttons to the edges */
+  align-items: center; /* Vertically align items in the container */
   margin-bottom: 20px;
+  padding: 0 20px; /* Optional: Add padding to keep buttons from touching container edges */
 }
 
 #mode-selection button {
@@ -37,6 +38,7 @@ header h1 {
   border: 1px solid #c5c6c7;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
 #mode-selection button:hover {
