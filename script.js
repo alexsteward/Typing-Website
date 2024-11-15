@@ -8,10 +8,42 @@ document.addEventListener("DOMContentLoaded", () => {
   const regularModeButton = document.getElementById("regular-mode");
   const punctuationModeButton = document.getElementById("punctuation-mode");
 
+  const popup = document.createElement("div");
+  popup.id = "completion-popup";
+  popup.innerHTML = `
+    <div id="popup-content">
+      <button id="close-popup">&times;</button>
+      <h2>Completed!</h2>
+      <p id="popup-wpm">WPM: 0</p>
+      <p id="popup-accuracy">Accuracy: 100%</p>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  const closePopupButton = document.getElementById("close-popup");
+
+  // Show the popup with stats from the main area
+  const showCompletionPopup = () => {
+    // Use wpmEl and accuracyEl to get current values
+    const wpm = wpmEl.textContent;
+    const accuracy = accuracyEl.textContent;
+
+    // Update the popup with WPM and accuracy values
+    document.getElementById("popup-wpm").textContent = `WPM: ${wpm}`;
+    document.getElementById("popup-accuracy").textContent = `Accuracy: ${accuracy}`;
+
+    // Show the popup
+    popup.style.display = "block";
+  };
+
+  // Close popup handler
+  closePopupButton.addEventListener("click", () => {
+    popup.style.display = "none"; // Hide the popup
+  });
+
   let currentPrompt = "";
   let startTime = null;
   let errorIndices = new Set();
-  let allErrors = 0; // Total errors for accuracy tracking
   let charactersTyped = 0;
   let currentMode = "regular";
 
@@ -40,10 +72,9 @@ document.addEventListener("DOMContentLoaded", () => {
       .join("");
     inputArea.value = "";
     inputArea.disabled = false;
-    startTime = null;
     errorIndices.clear();
-    allErrors = 0;
     charactersTyped = 0;
+    startTime = null;
     updateStats(0, 100);
   };
 
@@ -62,42 +93,11 @@ document.addEventListener("DOMContentLoaded", () => {
     return Math.max(0, Math.floor((correctChars / totalChars) * 100));
   };
 
-  // Update WPM and Accuracy
+  // Update WPM and Accuracy in the main UI
   const updateStats = (wpm, accuracy) => {
     wpmEl.textContent = wpm;
     accuracyEl.textContent = `${accuracy}%`;
   };
-
-  // Popup elements
-  const popup = document.createElement("div");
-popup.id = "completion-popup";
-popup.innerHTML = `
-  <div id="popup-content">
-    <button id="close-popup">&times;</button>
-    <h2>Completed!</h2>
-    <p id="popup-wpm">WPM: 0</p>
-    <p id="popup-accuracy">Accuracy: 100%</p>
-  </div>
-`;
-document.body.appendChild(popup);
-
-// Show the popup with stats
-const showCompletionPopup = (wpm, accuracy) => {
-  document.getElementById("popup-wpm").textContent = `WPM: ${wpmEL}`;
-  document.getElementById("popup-accuracy").textContent = `Accuracy: ${accuracyEL}%`;
-  popup.style.display = "block"; // Show the popup
-
-  // Attach the event listener for closing the popup
-  const closePopupButton = popup.querySelector("#close-popup"); // Make sure it's attached to the right popup
-  closePopupButton.addEventListener("click", () => {
-    console.log("Close button clicked!");  // Debugging line
-    popup.style.display = "none"; // Hide the popup
-  });
-};
-
-// Example of calling showCompletionPopup with dummy data
-// showCompletionPopup(120, 98); // This line would show the popup with the stats
-
 
   // Handle input events
   inputArea.addEventListener("input", () => {
@@ -138,8 +138,8 @@ const showCompletionPopup = (wpm, accuracy) => {
 
     // Prompt completion
     if (userInput.length === currentPrompt.length) {
+      showCompletionPopup();  // Show completion popup with values from stats
       inputArea.disabled = true; // Disable input after completion
-      showCompletionPopup(wpm, accuracy); // Show the popup
     }
   });
 
@@ -152,7 +152,7 @@ const showCompletionPopup = (wpm, accuracy) => {
     updateStats(0, 100);
     const spans = promptEl.querySelectorAll("span");
     spans.forEach(span => {
-      span.classList.remove("correct", "incorrect");
+      span.classList.remove("correct", "incorrect"); 
     });
     startTime = null;
   });
