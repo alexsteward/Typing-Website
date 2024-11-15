@@ -24,17 +24,16 @@ header h1 {
 
 #mode-selection {
   display: flex;
-  justify-content: space-between; /* Buttons spaced across the container */
+  justify-content: space-evenly; /* Buttons evenly spaced */
   align-items: center;
-  margin-bottom: 20px; /* Ensure there's some space below the mode buttons */
-  padding: 0 20px; /* Padding to keep buttons from touching edges */
-  margin-top: 30px; /* Add a top margin to create space between the buttons and the prompt */
+  width: 100%;
+  margin-bottom: 30px; /* Increased space between the buttons and the prompt */
+  padding: 0 20px; /* Padding to keep buttons from touching the edges */
 }
-
 
 #mode-selection button {
   font-size: 14px;
-  padding: 8px 16px;
+  padding: 10px 20px;
   background-color: #16191f;
   color: #ffffff;
   border: 1px solid #c5c6c7;
@@ -47,17 +46,11 @@ header h1 {
   background-color: #272b36;
 }
 
-
 #prompt-container {
   display: flex;
   align-items: center;
+  justify-content: center; /* Center the prompt horizontally */
   margin-bottom: 30px;
-}
-
-#start-arrow {
-  font-size: 20px;
-  color: #ffcc00;
-  margin-right: 5px;
 }
 
 .prompt {
@@ -127,6 +120,7 @@ button:hover {
   background-color: #272b36;
   color: #a1a1a1;
 }
+
 
 
 
