@@ -17,21 +17,20 @@
         <button id="punctuation-mode" class="mode-button">Punctuation</button>
       </div>
       <div id="prompt-container">
-        <div id="start-arrow">→</div>
-        <div id="prompt" class="prompt"></div>
+        <div id="start-arrow">→</div> <!-- Aesthetic arrow -->
+        <div id="prompt" class="prompt"></div> <!-- The actual prompt text -->
       </div>
       <div id="stats">
         <button id="refresh" title="Restart current prompt">↺</button>
         <button id="next" title="Move to next prompt">→</button>
         <div id="pace">WPM: <span id="wpm">0</span></div>
         <div id="accuracy">Accuracy: <span id="accuracy-value">100%</span></div>
-        <button id="submit-score" title="Submit Score">Submit Score</button> <!-- Submit button -->
+        <!-- Completed message will appear here -->
+        <div id="completion-message" hidden>
+          <p>Completed!</p>
+        </div>
       </div>
       <textarea id="input-area" autofocus></textarea>
-      <div id="leaderboard-container">
-        <h2>Leaderboard</h2>
-        <ul id="leaderboard"></ul> <!-- Leaderboard list -->
-      </div>
     </main>
   </div>
   <script src="script.js"></script>
