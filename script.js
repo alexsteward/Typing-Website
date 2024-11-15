@@ -117,10 +117,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Button event listeners
   refreshButton.addEventListener("click", () => {
-    loadPrompt();  
-  });
-  
-  nextButton.addEventListener("click", loadPrompt);
+  inputArea.value = ""; 
+  errorIndices.clear();  
+  charactersTyped = 0;  
+  completionMessage.hidden = true;  
+  inputArea.disabled = false;  
+  updateStats(0, 100);  
+});
+
+nextButton.addEventListener("click", loadPrompt);
 
   // Mode selection
   regularModeButton.addEventListener("click", () => {
