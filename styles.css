@@ -27,7 +27,7 @@ header h1 {
   justify-content: space-evenly; /* Buttons evenly spaced */
   align-items: center;
   width: 100%;
-  margin-bottom: 30px; /* Increased space between the buttons and the prompt */
+  margin-bottom: 100px; /* Increased space between the buttons and the prompt */
   padding: 0 20px; /* Padding to keep buttons from touching the edges */
 }
 
