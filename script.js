@@ -83,8 +83,8 @@ document.body.appendChild(popup);
 
 // Show the popup with stats
 const showCompletionPopup = (wpm, accuracy) => {
-  document.getElementById("popup-wpm").textContent = `WPM: ${wpm}`;
-  document.getElementById("popup-accuracy").textContent = `Accuracy: ${accuracy}%`;
+  document.getElementById("popup-wpm").textContent = `WPM: ${wpmEL}`;
+  document.getElementById("popup-accuracy").textContent = `Accuracy: ${accuracyEL}%`;
   popup.style.display = "block"; // Show the popup
 
   // Attach the event listener for closing the popup
