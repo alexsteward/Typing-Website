@@ -1,7 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const promptEl = document.getElementById("prompt");
   const inputArea = document.getElementById("input-area");
-  const completionMessage = document.getElementById("completion-message");
   const refreshButton = document.getElementById("refresh");
   const nextButton = document.getElementById("next");
   const wpmEl = document.getElementById("wpm");
@@ -40,7 +39,6 @@ document.addEventListener("DOMContentLoaded", () => {
       .map((char) => `<span>${char}</span>`)
       .join("");
     inputArea.value = "";
-    completionMessage.hidden = true;
     inputArea.disabled = false;
     startTime = null;
     errorIndices.clear();
@@ -51,18 +49,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Calculate Words Per Minute (WPM)
   const calculateWPM = (elapsedTime) => {
-  const correctChars = currentPrompt.length - errorIndices.size;
-  const wordsTyped = correctChars / 5; // Assume 5 characters per word
-  return Math.max(0, Math.floor(wordsTyped / elapsedTime));
-};
+    const correctChars = currentPrompt.length - errorIndices.size;
+    const wordsTyped = correctChars / 5; // Assume 5 characters per word
+    return Math.max(0, Math.floor(wordsTyped / elapsedTime));
+  };
 
   // Calculate Accuracy
   const calculateAccuracy = () => {
-  const totalChars = currentPrompt.length;
-  const incorrectChars = errorIndices.size;
-  const correctChars = totalChars - incorrectChars;
-  return Math.max(0, Math.floor((correctChars / totalChars) * 100));
-};
+    const totalChars = currentPrompt.length;
+    const incorrectChars = errorIndices.size;
+    const correctChars = totalChars - incorrectChars;
+    return Math.max(0, Math.floor((correctChars / totalChars) * 100));
+  };
 
   // Update WPM and Accuracy
   const updateStats = (wpm, accuracy) => {
@@ -70,67 +68,92 @@ document.addEventListener("DOMContentLoaded", () => {
     accuracyEl.textContent = `${accuracy}%`;
   };
 
+  // Popup elements
+  const popup = document.createElement("div");
+  popup.id = "completion-popup";
+  popup.innerHTML = `
+    <div id="popup-content">
+      <button id="close-popup">&times;</button>
+      <h2>Completed!</h2>
+      <p id="popup-wpm">WPM: 0</p>
+      <p id="popup-accuracy">Accuracy: 100%</p>
+    </div>
+  `;
+  document.body.appendChild(popup);
+
+  const closePopupButton = document.getElementById("close-popup");
+
+  // Show the popup with stats
+  const showCompletionPopup = (wpm, accuracy) => {
+    document.getElementById("popup-wpm").textContent = `WPM: ${wpm}`;
+    document.getElementById("popup-accuracy").textContent = `Accuracy: ${accuracy}%`;
+    popup.style.display = "block"; // Show the popup
+  };
+
+  // Close popup handler
+  closePopupButton.addEventListener("click", () => {
+    popup.style.display = "none"; // Hide the popup
+  });
+
   // Handle input events
- inputArea.addEventListener("input", () => {
-  if (!startTime) startTime = new Date();
+  inputArea.addEventListener("input", () => {
+    if (!startTime) startTime = new Date();
 
-  const userInput = inputArea.value;
-  const spans = promptEl.querySelectorAll("span");
+    const userInput = inputArea.value;
+    const spans = promptEl.querySelectorAll("span");
 
-  const previouslyIncorrect = new Set([...errorIndices]); // Keep track of previously recorded errors
-  errorIndices.clear(); // Reset error tracking for this evaluation
+    const previouslyIncorrect = new Set([...errorIndices]); // Keep track of previously recorded errors
+    errorIndices.clear(); // Reset error tracking for this evaluation
 
-  spans.forEach((span, index) => {
-    const char = userInput[index];
+    spans.forEach((span, index) => {
+      const char = userInput[index];
 
-    if (char == null) {
-      span.classList.remove("correct", "incorrect");
-    } else if (char === span.textContent) {
-      span.classList.add("correct");
-      span.classList.remove("incorrect");
-    } else {
-      span.classList.add("incorrect");
-      span.classList.remove("correct");
-      errorIndices.add(index);
+      if (char == null) {
+        span.classList.remove("correct", "incorrect");
+      } else if (char === span.textContent) {
+        span.classList.add("correct");
+        span.classList.remove("incorrect");
+      } else {
+        span.classList.add("incorrect");
+        span.classList.remove("correct");
+        errorIndices.add(index);
+      }
+    });
+
+    // Ensure all previous errors remain counted for accuracy deduction
+    previouslyIncorrect.forEach((index) => errorIndices.add(index));
+
+    charactersTyped = userInput.length;
+
+    // Calculate stats dynamically
+    const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
+    const wpm = calculateWPM(elapsedTime);
+    const accuracy = calculateAccuracy();
+
+    updateStats(wpm, accuracy);
+
+    // Prompt completion
+    if (userInput.length === currentPrompt.length) {
+      inputArea.disabled = true; // Disable input after completion
+      showCompletionPopup(wpm, accuracy); // Show the popup
     }
   });
 
-  // Ensure all previous errors remain counted for accuracy deduction
-  previouslyIncorrect.forEach((index) => errorIndices.add(index));
-
-  charactersTyped = userInput.length;
-
-  // Calculate stats dynamically
-  const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
-  const wpm = calculateWPM(elapsedTime);
-  const accuracy = calculateAccuracy();
-
-  updateStats(wpm, accuracy);
-
-  // Prompt completion
-  if (userInput.length === currentPrompt.length) {
-    completionMessage.hidden = false;
-    inputArea.disabled = true; // Disable input after completion
-  }
-});
-
-
   // Button event listeners
-refreshButton.addEventListener("click", () => {
-  inputArea.value = "";
-  errorIndices.clear();
-  charactersTyped = 0;
-  completionMessage.hidden = true;
-  inputArea.disabled = false;
-  updateStats(0, 100);
-  const spans = promptEl.querySelectorAll("span");
-  spans.forEach(span => {
-    span.classList.remove("correct", "incorrect"); 
+  refreshButton.addEventListener("click", () => {
+    inputArea.value = "";
+    errorIndices.clear();
+    charactersTyped = 0;
+    inputArea.disabled = false;
+    updateStats(0, 100);
+    const spans = promptEl.querySelectorAll("span");
+    spans.forEach(span => {
+      span.classList.remove("correct", "incorrect");
+    });
+    startTime = null;
   });
-  startTime = null;
-});
 
-nextButton.addEventListener("click", loadPrompt);
+  nextButton.addEventListener("click", loadPrompt);
 
   // Mode selection
   regularModeButton.addEventListener("click", () => {
@@ -150,6 +173,7 @@ nextButton.addEventListener("click", loadPrompt);
   // Initialize
   loadPrompt();
 });
+
 
 
 
