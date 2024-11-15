@@ -6,37 +6,35 @@ document.addEventListener("DOMContentLoaded", () => {
   const nextButton = document.getElementById("next");
   const wpmEl = document.getElementById("wpm");
   const accuracyEl = document.getElementById("accuracy-value");
-
   const regularModeButton = document.getElementById("regular-mode");
   const punctuationModeButton = document.getElementById("punctuation-mode");
 
   let currentPrompt = "";
   let startTime = null;
-  let errorIndices = new Set(); // Tracks indices of errors for accuracy
+  let errorIndices = new Set();
+  let allErrors = 0; // Total errors for accuracy tracking
   let charactersTyped = 0;
+  let currentMode = "regular";
 
-  // Regular and punctuation prompts
-  const regularPrompts = [
-    "the quick brown fox jumps over the lazy dog",
-    "typing is fun and improves your speed",
-    "accuracy and consistency are key",
-    "test your skills with this challenge"
-  ];
-
-  const punctuationPrompts = [
-    "Hello, world! How are you today?",
-    "This is a test: Are you ready?",
-    "Let's go! Finish this quickly.",
-    "The rain is heavy, but we can still go."
-  ];
-
-  let currentMode = "regular"; // Default mode is regular
+  const prompts = {
+    regular: [
+      "the quick brown fox",
+      "typing is fun",
+      "practice every day",
+      "focus on accuracy",
+    ],
+    punctuation: [
+      "Hello, world!",
+      "How are you?",
+      "It's a great day.",
+      "Yes, indeed!",
+    ],
+  };
 
   // Load a new prompt
   const loadPrompt = () => {
-    // Select the prompts based on the mode
-    const prompts = currentMode === "regular" ? regularPrompts : punctuationPrompts;
-    currentPrompt = prompts[Math.floor(Math.random() * prompts.length)];
+    currentPrompt =
+      prompts[currentMode][Math.floor(Math.random() * prompts[currentMode].length)];
     promptEl.innerHTML = currentPrompt
       .split("")
       .map((char) => `<span>${char}</span>`)
@@ -46,6 +44,7 @@ document.addEventListener("DOMContentLoaded", () => {
     inputArea.disabled = false;
     startTime = null;
     errorIndices.clear();
+    allErrors = 0;
     charactersTyped = 0;
     updateStats(0, 100);
   };
@@ -59,8 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
   // Calculate Accuracy
   const calculateAccuracy = () => {
     const totalChars = currentPrompt.length;
-    const incorrectChars = errorIndices.size;
-    const correctChars = totalChars - incorrectChars;
+    const correctChars = totalChars - allErrors;
     return Math.max(0, Math.floor((correctChars / totalChars) * 100));
   };
 
@@ -70,14 +68,14 @@ document.addEventListener("DOMContentLoaded", () => {
     accuracyEl.textContent = `${accuracy}%`;
   };
 
-  // Input event listener
+  // Handle input events
   inputArea.addEventListener("input", () => {
     if (!startTime) startTime = new Date();
 
     const userInput = inputArea.value;
     const spans = promptEl.querySelectorAll("span");
 
-    errorIndices.clear(); // Reset error tracking for this evaluation
+    errorIndices.clear();
 
     spans.forEach((span, index) => {
       const char = userInput[index];
@@ -90,23 +88,23 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         span.classList.add("incorrect");
         span.classList.remove("correct");
-        errorIndices.add(index); // Mark this index as an error
+        errorIndices.add(index);
       }
     });
 
+    allErrors += errorIndices.size;
+
     charactersTyped = userInput.length;
 
-    // Calculate WPM and accuracy
-    const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
+    const elapsedTime = (new Date() - startTime) / 1000 / 60;
     const wpm = calculateWPM(elapsedTime);
     const accuracy = calculateAccuracy();
 
     updateStats(wpm, accuracy);
 
-    // Check if the prompt is fully typed
     if (userInput.length === currentPrompt.length) {
       completionMessage.hidden = false;
-      inputArea.disabled = true; // Disable input after completion
+      inputArea.disabled = true;
     }
   });
 
@@ -117,17 +115,22 @@ document.addEventListener("DOMContentLoaded", () => {
   // Mode selection
   regularModeButton.addEventListener("click", () => {
     currentMode = "regular";
-    loadPrompt(); // Reload prompt with new mode
+    regularModeButton.classList.add("active");
+    punctuationModeButton.classList.remove("active");
+    loadPrompt();
   });
 
   punctuationModeButton.addEventListener("click", () => {
     currentMode = "punctuation";
-    loadPrompt(); // Reload prompt with new mode
+    punctuationModeButton.classList.add("active");
+    regularModeButton.classList.remove("active");
+    loadPrompt();
   });
 
   // Initialize
   loadPrompt();
 });
+
 
 
 
