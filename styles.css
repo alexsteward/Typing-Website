@@ -137,6 +137,12 @@ button:hover {
 #leaderboard {
   list-style-type: none;
   padding: 0;
+  margin-top: 10px;
+}
+
+#leaderboard li {
+  padding: 5px 0;
+}
 
 
 
