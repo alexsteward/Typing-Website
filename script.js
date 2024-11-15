@@ -51,16 +51,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Calculate Words Per Minute (WPM)
   const calculateWPM = (elapsedTime) => {
-    const wordsTyped = currentPrompt.length / 5;
-    return Math.max(0, Math.floor(wordsTyped / elapsedTime));
-  };
+  const correctChars = currentPrompt.length - errorIndices.size;
+  const wordsTyped = correctChars / 5; // Average word length is 5 characters
+  return Math.max(0, Math.floor(wordsTyped / elapsedTime));
+};
 
   // Calculate Accuracy
   const calculateAccuracy = () => {
-    const totalChars = currentPrompt.length;
-    const correctChars = totalChars - allErrors;
-    return Math.max(0, Math.floor((correctChars / totalChars) * 100));
-  };
+  const totalChars = currentPrompt.length;
+  const incorrectChars = errorIndices.size;
+  const correctChars = totalChars - incorrectChars;
+  return Math.max(0, Math.floor((correctChars / totalChars) * 100));
+};
 
   // Update WPM and Accuracy
   const updateStats = (wpm, accuracy) => {
@@ -69,44 +71,47 @@ document.addEventListener("DOMContentLoaded", () => {
   };
 
   // Handle input events
-  inputArea.addEventListener("input", () => {
-    if (!startTime) startTime = new Date();
+ inputArea.addEventListener("input", () => {
+  if (!startTime) startTime = new Date();
 
-    const userInput = inputArea.value;
-    const spans = promptEl.querySelectorAll("span");
+  const userInput = inputArea.value;
+  const spans = promptEl.querySelectorAll("span");
 
-    errorIndices.clear();
+  errorIndices.clear(); // Reset error tracking for this evaluation
 
-    spans.forEach((span, index) => {
-      const char = userInput[index];
+  spans.forEach((span, index) => {
+    const char = userInput[index];
 
-      if (char == null) {
-        span.classList.remove("correct", "incorrect");
-      } else if (char === span.textContent) {
-        span.classList.add("correct");
-        span.classList.remove("incorrect");
-      } else {
-        span.classList.add("incorrect");
-        span.classList.remove("correct");
-        errorIndices.add(index);
-      }
-    });
-
-    allErrors += errorIndices.size;
-
-    charactersTyped = userInput.length;
-
-    const elapsedTime = (new Date() - startTime) / 1000 / 60;
-    const wpm = calculateWPM(elapsedTime);
-    const accuracy = calculateAccuracy();
-
-    updateStats(wpm, accuracy);
-
-    if (userInput.length === currentPrompt.length) {
-      completionMessage.hidden = false;
-      inputArea.disabled = true;
+    if (char == null) {
+      // Reset styling for characters not yet typed
+      span.classList.remove("correct", "incorrect");
+    } else if (char === span.textContent) {
+      // Mark correctly typed characters
+      span.classList.add("correct");
+      span.classList.remove("incorrect");
+    } else {
+      // Mark incorrectly typed characters
+      span.classList.add("incorrect");
+      span.classList.remove("correct");
+      errorIndices.add(index); // Record this index as an error
     }
   });
+
+  charactersTyped = userInput.length;
+
+  // Recalculate stats
+  const elapsedTime = (new Date() - startTime) / 1000 / 60; // Time in minutes
+  const wpm = calculateWPM(elapsedTime);
+  const accuracy = calculateAccuracy();
+
+  updateStats(wpm, accuracy);
+
+  // Check if the prompt is fully typed
+  if (userInput.length === currentPrompt.length) {
+    completionMessage.hidden = false;
+    inputArea.disabled = true; // Disable input after completion
+  }
+});
 
   // Button event listeners
   refreshButton.addEventListener("click", loadPrompt);
