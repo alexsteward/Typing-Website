@@ -70,30 +70,34 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Popup elements
   const popup = document.createElement("div");
-  popup.id = "completion-popup";
-  popup.innerHTML = `
-    <div id="popup-content">
-      <button id="close-popup">&times;</button>
-      <h2>Completed!</h2>
-      <p id="popup-wpm">WPM: 0</p>
-      <p id="popup-accuracy">Accuracy: 100%</p>
-    </div>
-  `;
-  document.body.appendChild(popup);
+popup.id = "completion-popup";
+popup.innerHTML = `
+  <div id="popup-content">
+    <button id="close-popup">&times;</button>
+    <h2>Completed!</h2>
+    <p id="popup-wpm">WPM: 0</p>
+    <p id="popup-accuracy">Accuracy: 100%</p>
+  </div>
+`;
+document.body.appendChild(popup);
 
-  const closePopupButton = document.getElementById("close-popup");
-
-  // Show the popup with stats
-  const showCompletionPopup = (wpm, accuracy) => {
-    document.getElementById("popup-wpm").textContent = `WPM: ${wpm}`;
-    document.getElementById("popup-accuracy").textContent = `Accuracy: ${accuracy}%`;
-    popup.style.display = "block"; // Show the popup
-  };
+// Show the popup with stats
+const showCompletionPopup = (wpm, accuracy) => {
+  document.getElementById("popup-wpm").textContent = `WPM: ${wpm}`;
+  document.getElementById("popup-accuracy").textContent = `Accuracy: ${accuracy}%`;
+  popup.style.display = "block"; // Show the popup
 
   // Close popup handler
+  const closePopupButton = document.getElementById("close-popup");
   closePopupButton.addEventListener("click", () => {
+    console.log("Close button clicked!");  // Debugging line
     popup.style.display = "none"; // Hide the popup
   });
+};
+
+// Example of calling showCompletionPopup with dummy data
+// showCompletionPopup(120, 98); // This line would show the popup with the stats
+
 
   // Handle input events
   inputArea.addEventListener("input", () => {
