@@ -25,22 +25,18 @@
         <button id="next" title="Move to next prompt">→</button>
         <div id="pace">WPM: <span id="wpm">0</span></div>
         <div id="accuracy">Accuracy: <span id="accuracy-value">100%</span></div>
+        <!-- Completed message will appear here -->
+        <div id="completion-message" hidden>
+          <p>Completed!</p>
+        </div>
       </div>
       <textarea id="input-area" autofocus></textarea>
     </main>
-    <!-- Pop-up for Completion -->
-    <div id="completion-popup" hidden>
-      <div id="popup-content">
-        <button id="close-popup" title="Close">×</button>
-        <h2>Completed!</h2>
-        <p>WPM: <span id="popup-wpm">0</span></p>
-        <p>Accuracy: <span id="popup-accuracy">100%</span></p>
-      </div>
-    </div>
   </div>
   <script src="script.js"></script>
 </body>
 </html>
+
 
 
 
