@@ -87,8 +87,8 @@ const showCompletionPopup = (wpm, accuracy) => {
   document.getElementById("popup-accuracy").textContent = `Accuracy: ${accuracy}%`;
   popup.style.display = "block"; // Show the popup
 
-  // Close popup handler
-  const closePopupButton = document.getElementById("close-popup");
+  // Attach the event listener for closing the popup
+  const closePopupButton = popup.querySelector("#close-popup"); // Make sure it's attached to the right popup
   closePopupButton.addEventListener("click", () => {
     console.log("Close button clicked!");  // Debugging line
     popup.style.display = "none"; // Hide the popup
