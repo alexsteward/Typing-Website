@@ -22,7 +22,7 @@ header h1 {
   margin-bottom: 20px;
 }
 
-#mode-selection {
+#mode-selector {
   display: flex;
   justify-content: space-evenly; /* Buttons evenly spaced */
   align-items: center;
@@ -31,7 +31,7 @@ header h1 {
   padding: 0 20px; /* Padding to keep buttons from touching the edges */
 }
 
-#mode-selection button {
+#mode-selector button {
   font-size: 14px;
   padding: 10px 20px;
   background-color: #16191f;
@@ -42,7 +42,7 @@ header h1 {
   transition: background-color 0.2s ease;
 }
 
-#mode-selection button:hover {
+#mode-selector button:hover {
   background-color: #272b36;
 }
 
@@ -122,51 +122,12 @@ button:hover {
   color: #a1a1a1;
 }
 
-#completion-popup {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 300px;
-  background-color: #d3d3d3; /* Light gray */
-  color: #16191f; /* Dark text */
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  text-align: center;
-  z-index: 1000;
-  display: none; /* Initially hidden */
+#completion-message {
+  font-size: 18px;
+  color: #00ff00;
+  margin-top: 10px;
 }
 
-#popup-content h2 {
-  font-size: 22px;
-  margin-bottom: 15px;
-}
-
-#popup-content p {
-  font-size: 16px;
-  margin: 5px 0;
-}
-
-#close-popup {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 16px;
-  background-color: #272b36; /* Dark gray */
-  color: #ffffff;
-  border: none;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  text-align: center;
-  line-height: 22px;
-  cursor: pointer;
-}
-
-#close-popup:hover {
-  background-color: #16191f;
-}
 
 
 
