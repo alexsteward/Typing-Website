@@ -128,21 +128,6 @@ button:hover {
   margin-top: 10px;
 }
 
-#leaderboard-container {
-  margin-top: 30px;
-  font-size: 16px;
-  color: #c5c6c7;
-}
-
-#leaderboard {
-  list-style-type: none;
-  padding: 0;
-  margin-top: 10px;
-}
-
-#leaderboard li {
-  padding: 5px 0;
-}
 
 
 
